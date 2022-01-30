@@ -4,6 +4,9 @@ from pymafia.iotms import crimbo_shrub
 # 2015
 from pymafia.iotms import barrel_god, machine_elf
 
+# 2016
+from pymafia.iotms import protonic_pack
+
 # 2017
 from pymafia.iotms import love_tunnel, mumming_trunk, pantogram
 
