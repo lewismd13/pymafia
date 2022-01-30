@@ -2,7 +2,7 @@
 from pymafia.iotms import crimbo_shrub
 
 # 2015
-from pymafia.iotms import barrel_god
+from pymafia.iotms import barrel_god, machine_elf
 
 # 2017
 from pymafia.iotms import love_tunnel
