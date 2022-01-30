@@ -4,6 +4,9 @@ from pymafia.iotms import crimbo_shrub
 # 2015
 from pymafia.iotms import barrel_god
 
+# 2017
+from pymafia.iotms import love_tunnel
+
 # 2018
 from pymafia.iotms import boxing_daycare, god_lobster
 
