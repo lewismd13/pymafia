@@ -5,7 +5,7 @@ from pymafia.iotms import crimbo_shrub
 from pymafia.iotms import barrel_god
 
 # 2018
-from pymafia.iotms import boxing_daycare
+from pymafia.iotms import boxing_daycare, god_lobster
 
 # 2019
 from pymafia.iotms import cosplay_saber

@@ -16,10 +16,10 @@ def is_upgraded():
 
 def upgrade(new_upgrade):
     """Upgrade the Fourth of May Cosplay Saber."""
-    if new_upgrade not in upgrades:
-        raise ValueError(f"unexpected value for new_upgrade: {new_upgrade!r}")
     if not have() or is_upgraded():
         return False
+    if new_upgrade not in upgrades:
+        raise ValueError(f"unexpected value for new_upgrade: {new_upgrade!r}")
 
     ash.cli_execute(f"saber {new_upgrade}")
     return True
