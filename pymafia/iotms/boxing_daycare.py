@@ -19,7 +19,6 @@ def daydream():
 def scavenge(turns=0):
     """Scavenge for gym equipment. The first scavenge each day is free."""
     times = turns + get_property("_daycareGymScavenges", int) == 0
-
     if not have() or ash.my_adventures() < turns or times <= 0:
         return False
 
