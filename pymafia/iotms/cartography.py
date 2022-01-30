@@ -27,8 +27,10 @@ def map_monster(location, monster, macro=Macro()):
         ash.handling_choice() and ash.last_choice() == 1435
     ), "failed to encounter the Map the Monsters noncombat adventure"
 
-    url = f"choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink={monster.id}"
-    m = re.search("<!-- MONSTERID: (\\d+) -->", ash.visit_url(url))
+    page = ash.visit_url(
+        f"choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink={monster.id}"
+    )
+    m = re.search("<!-- MONSTERID: (\\d+) -->", page)
     assert (
         m and int(m.group(1)) == monster.id
     ), f"failed to enter combat with monster: {monster!r}"
