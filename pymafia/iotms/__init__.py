@@ -8,7 +8,7 @@ from pymafia.iotms import barrel_god
 from pymafia.iotms import boxing_daycare, god_lobster
 
 # 2019
-from pymafia.iotms import cosplay_saber
+from pymafia.iotms import cosplay_saber, kramco
 
 # 2020
 from pymafia.iotms import cartography
