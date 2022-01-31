@@ -32,7 +32,7 @@ def fight(reward, macro=Macro()):
     if not have():
         raise RuntimeError("need a God Lobster")
     if fights_left() < 1:
-        raise RuntimeError("no God Lobster fights remaining today")
+        raise RuntimeError("out of God Lobster fights")
 
     choice = reward_choices[reward]
     ash.use_familiar(familiar)

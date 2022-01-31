@@ -8,7 +8,7 @@ from pymafia.iotms import crimbo_shrub
 from pymafia.iotms import barrel_god, machine_elf
 
 # 2016
-from pymafia.iotms import protonic_pack, snojo
+from pymafia.iotms import protonic_pack, snojo, witchess
 
 # 2017
 from pymafia.iotms import love_tunnel, mumming_trunk, pantogram
