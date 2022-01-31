@@ -27,7 +27,7 @@ def is_decorated():
 
 
 def check_decorations():
-    """Return a tuple containing the current Crimbo Shrub topper, lights, garland, and gift."""
+    """Current Crimbo Shrub decorations."""
     return (
         get_property("shrubTopper"),
         get_property("shrubLights"),

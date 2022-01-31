@@ -11,7 +11,7 @@ def have():
 
 
 def monsters_mapped():
-    """Return the number monsters that have been mapped today."""
+    """Map the Monsters skill uses today."""
     return get_property("_monstersMapped", int)
 
 

@@ -10,10 +10,10 @@ def have():
 
 
 def fights_today():
-    """Return the number of free Deep Machine Tunnel fights used today"""
+    """Free Deep Machine Tunnel fights used today."""
     return km.FamiliarData.fightsToday(familiar.id)
 
 
 def fights_left():
-    """Return the number of free Deep Machine Tunnel fights left today"""
+    """Free Deep Machine Tunnel fights left today."""
     return 5 - fights_today()

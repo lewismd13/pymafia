@@ -19,7 +19,7 @@ def have():
 
 
 def costumes_used():
-    """Return a list of the costumes applied today."""
+    """Costumes applied today."""
     uses = [int(x) for x in get_property("_mummeryUses").split(",") if x]
     return [name for name, choice in costume_choices.items() if choice in uses]
 

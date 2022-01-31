@@ -1,3 +1,6 @@
+# 2011
+from pymafia.iotms import stomping_boots
+
 # 2014
 from pymafia.iotms import crimbo_shrub
 

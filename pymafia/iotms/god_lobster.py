@@ -18,12 +18,12 @@ def have():
 
 
 def fights_today():
-    """Return the number of God Lobster fights used today."""
+    """God Lobster fights used today."""
     return get_property("godLobsterFights", int)
 
 
 def fights_left():
-    """Return the number of God Lobster fights remaining today."""
+    """God Lobster fights remaining today."""
     return 3 - fights_today()
 
 
