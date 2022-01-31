@@ -29,17 +29,21 @@ def fights_left():
 
 def fight(reward, macro=Macro()):
     """Fight the God Lobster and choose a reward."""
-    if not have() or fights_left() < 1:
-        return False
+    if not have():
+        raise RuntimeError("need a God Lobster")
+    if fights_left() < 1:
+        raise RuntimeError("no God Lobster fights remaining today")
 
     choice = reward_choices[reward]
     ash.use_familiar(familiar)
     if reward == "regalia":
-        for item in regalia[::-1]:
-            if _have(item):
-                ash.equip(item)
-                break
+        items = [x for x in regalia if _have(x)]
+        if items:
+            ash.equip(items[-1])
+    initial_fights = fights_today()
     ash.visit_url("main.php?fightgodlobster=1")
     ash.run_combat(macro)
     ash.run_choice(choice)
-    return True
+
+    if fights_today() != initial_fights + 1:
+        raise RuntimeError("failed to fight the God Lobster")

@@ -10,9 +10,8 @@ def have():
 def smash_free():
     """Smash the free barrels in The Barrel full of Barrels."""
     if not have():
-        return False
+        raise RuntimeError("need a shrine to the Barrel god installed")
 
     pattern = '<div class="ex"><a class="spot" href="([^"]+)"><img title="A barrel"'
     for barrel in re.findall(pattern, ash.visit_url("barrel.php")):
         ash.visit_url(barrel)
-    return True

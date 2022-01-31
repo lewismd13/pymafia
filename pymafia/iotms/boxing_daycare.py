@@ -8,22 +8,29 @@ def have():
 
 def daydream():
     """Have a Boxing Daydream."""
-    if not have() or get_property("_daycareNap", bool):
-        return False
+    if not have():
+        raise RuntimeError("need access to the Boxing Daycare")
+    if get_property("_daycareNap", bool):
+        return
+
+    success = ash.cli_execute("daycare item")
+
+    if not success:
+        raise RuntimeError("failed to have a Boxing Daydream")
+
+
+def free_scavenge():
+    """Free scavenge for gym equipment."""
+    if not have():
+        raise RuntimeError("need access to the Boxing Daycare")
+    if get_property("_daycareGymScavenges", int) > 0:
+        return
 
     ash.visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare")
-    ash.run_choice(1)
-    return True
+    ash.run_choice(3)  # Enter the Boxing Daycare
+    ash.run_choice(2)  # Scavenge for gym equipment
+    ash.run_choice(5)  # Return to the Lobby
+    ash.run_choice(4)  # Leave
 
-
-def scavenge(turns=0):
-    """Scavenge for gym equipment. The first scavenge each day is free."""
-    times = turns + get_property("_daycareGymScavenges", int) == 0
-    if not have() or ash.my_adventures() < turns or times <= 0:
-        return False
-
-    ash.visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare")
-    ash.run_choice(3)
-    for _ in range(times):
-        ash.run_choice(2)
-    return True
+    if get_property("_daycareGymScavenges", int) != 1:
+        raise RuntimeError("failed to use the free scavenge")

@@ -33,8 +33,10 @@ def is_used():
 
 def fight_all(equipment, effect, item, macro=Macro()):
     """Fight all LOV monsters and get buffs/equipment."""
-    if not have() or is_used():
-        return False
+    if not have():
+        raise RuntimeError("need access to The Tunnel of L.O.V.E")
+    if is_used():
+        raise RuntimeError("love tunnel has already been used today")
 
     set_property("choiceAdventure1222", 1)  # Entrance
     set_property("choiceAdventure1223", 1)  # Fight LOV Enforcer
@@ -44,4 +46,6 @@ def fight_all(equipment, effect, item, macro=Macro()):
     set_property("choiceAdventure1227", 1)  # Fight LOV Equivocator
     set_property("choiceAdventure1228", item_choices[item])
     ash.adv1(Location("The Tunnel of L.O.V.E."), -1, macro)
-    return True
+
+    if not is_used():
+        raise RuntimeError("failed to use love tunnel")

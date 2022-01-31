@@ -18,16 +18,22 @@ def have():
     return _have(item)
 
 
-def choose_costume(costume):
+def costumes_used():
+    uses = [int(x) for x in get_property("_mummeryUses").split(",") if x]
+    return [name for name, choice in costume_choices.items() if choice in uses]
+
+
+def apply_costume(costume):
     """Dress up the player's current familiar with a costume."""
+    if not have():
+        raise RuntimeError("need a mumming trunk")
+    if not ash.my_familiar():
+        raise RuntimeError("need to have a familiar to put a costume on")
+    if costume in costumes_used():
+        raise RuntimeError(f"already applied the {costume!r} costume today")
+
     choice = costume_choices[costume]
+    ash.cli_execute(f"mummery {choice}")
 
-    if (
-        not have()
-        or not ash.my_familiar()
-        or str(choice) in get_property("_mummeryUses")
-    ):
-        return False
-
-    ash.cli_execute(f"mummery {costume}")
-    return True
+    if costume not in costumes_used():
+        raise RuntimeError(f"failed to apply the {costume!r} costume")

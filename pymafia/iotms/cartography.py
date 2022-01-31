@@ -17,23 +17,18 @@ def monsters_mapped():
 
 def map_monster(location, monster, macro=Macro()):
     """Map to a monster in a location."""
-    if not have() or monsters_mapped() >= 3:
-        return False
+    if not have():
+        raise RuntimeError("need the Comprehensive Cartography skill")
+    if monsters_mapped() >= 3:
+        raise RuntimeError("already mapped three monsters today")
 
     if not get_property("mappingMonsters"):
         ash.use_skill(skill)
     ash.visit_url(location.url)
-    assert (
-        ash.handling_choice() and ash.last_choice() == 1435
-    ), "failed to encounter the Map the Monsters noncombat adventure"
-
-    page = ash.visit_url(
-        f"choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink={monster.id}"
-    )
-    m = re.search("<!-- MONSTERID: (\\d+) -->", page)
-    assert (
-        m and int(m.group(1)) == monster.id
-    ), f"failed to enter combat with monster: {monster!r}"
-
+    if not ash.handling_choice() or ash.last_choice() != 1435:
+        raise RuntimeError("failed to encounter the Map the Monsters noncombat adventure")  # fmt: skip
+    page = ash.visit_url(f"choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink={monster.id}")  # fmt: skip
+    match = re.search("<!-- MONSTERID: (\\d+) -->", page)
+    if not match or int(match.group(1)) != monster.id:
+        raise RuntimeError(f"failed to enter combat with monster: {monster!r}")
     ash.run_combat(macro)
-    return True

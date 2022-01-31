@@ -12,7 +12,7 @@ lights_choices = {
     Element.SPOOKY: 5,
     Element.SLEAZE: 6,
 }
-garland_choices = {"hp": 1, "pvp": 2, "blocking": 3}
+garland_choices = {"HP": 1, "PvP": 2, "blocking": 3}
 gift_choices = {"yellow": 1, "meat": 2, "gifts": 3}
 
 
@@ -26,10 +26,24 @@ def is_decorated():
     return get_property("_shrubDecorated", bool)
 
 
+def check_decorations():
+    """Return a tuple containing the current Crimbo Shrub topper, lights, garland, and gift."""
+    return (
+        get_property("shrubTopper"),
+        get_property("shrubLights"),
+        get_property("shrubGarland"),
+        get_property("shrubGifts"),
+    )
+
+
 def decorate(topper, lights, garland, gift):
     """Decorate the Crimbo Shrub."""
-    if not have() or is_decorated():
-        return False
+    if not have():
+        raise RuntimeError("need a Crimbo Shrub")
+    if is_decorated() and check_decorations() == (topper, lights, garland, gift):
+        return
+    if is_decorated():
+        raise RuntimeError("already been decorated the shrub today")
 
     choices = (
         topper_choices[topper],
@@ -38,7 +52,7 @@ def decorate(topper, lights, garland, gift):
         gift_choices[gift],
     )
     ash.visit_url(f"inv_use.php?pwd=&which=99&whichitem={decorations.id}")
-    ash.visit_url(
-        f"choice.php?whichchoice=999&pwd=&option=1&topper={choices[0]}&lights={choices[1]}&garland={choices[2]}&gift={choices[3]}"
-    )
-    return True
+    ash.visit_url(f"choice.php?whichchoice=999&pwd=&option=1&topper={0}&lights={1}&garland={2}&gift={3}".format(*choices))  # fmt: skip
+
+    if check_decorations() != (topper, lights, garland, gift):
+        raise RuntimeError(f"failed to decorate the shrub with {(topper, lights, garland, gift)}")  # fmt: skip
