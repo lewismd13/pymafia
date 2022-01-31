@@ -15,5 +15,5 @@ def fights_today():
 
 
 def fights_left():
-    """Return the number of free Deep Machine Tunnel fights remaining today"""
+    """Return the number of free Deep Machine Tunnel fights left today"""
     return 5 - fights_today()

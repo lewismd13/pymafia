@@ -45,7 +45,7 @@ def fight_all(equipment, effect, item, macro=Macro()):
     set_property("choiceAdventure1226", effect_choices[effect])
     set_property("choiceAdventure1227", 1)  # Fight LOV Equivocator
     set_property("choiceAdventure1228", item_choices[item])
-    ash.adv1(Location("The Tunnel of L.O.V.E."), -1, macro)
+    success = ash.adv1(Location("The Tunnel of L.O.V.E."), -1, macro)
 
-    if not is_used():
+    if not success:
         raise RuntimeError("failed to use love tunnel")

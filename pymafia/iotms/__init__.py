@@ -11,7 +11,7 @@ from pymafia.iotms import protonic_pack, snojo
 from pymafia.iotms import love_tunnel, mumming_trunk, pantogram
 
 # 2018
-from pymafia.iotms import boxing_daycare, god_lobster
+from pymafia.iotms import boxing_daycare, god_lobster, songboom
 
 # 2019
 from pymafia.iotms import cosplay_saber, kramco

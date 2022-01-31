@@ -26,7 +26,7 @@ def free_fights_today():
 
 
 def free_fights_left():
-    """Return the number of free snojo fights remaining today."""
+    """Return the number of free snojo fights left today."""
     return 10 - free_fights_today()
 
 
