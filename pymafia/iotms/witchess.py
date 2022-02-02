@@ -13,21 +13,20 @@ pieces = [
     Monster("Witchess Queen"),
 ]
 
+
 def have():
     """Return true if the player has the Witchess Set in their campground."""
     return item in ash.get_campground()
 
 
 def fights_today():
+    """Witchess fights used today."""
     return get_property("_witchessFights", int)
 
 
 def fights_left():
+    """Witchess fights left today."""
     return 5 - fights_today()
-
-
-def buff_used():
-    return get_property("_witchessBuff", bool)
 
 
 def fight(piece, macro=Macro()):
@@ -37,7 +36,7 @@ def fight(piece, macro=Macro()):
         raise RuntimeError("out of Witchess fights")
     if piece not in pieces:
         raise ValueError(f"unknown piece: {piece!r}")
-    
+
     ash.visit_url("campground.php?action=witchess")
     ash.run_choice(1)
     ash.visit_url(
