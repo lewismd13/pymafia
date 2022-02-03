@@ -1,3 +1,4 @@
+import collections
 from pymafia.kolmafia import km
 from pymafia.types import (
     Item,
@@ -56,46 +57,50 @@ def __getattr__(name):
 def to_java(obj):
     if isinstance(obj, (type(None), int, float, str)):
         return km.Value(obj)
+
     if isinstance(obj, tuple(simple_types.values())):
-        parse = getattr(km.DataTypes, f"parse{type(obj).__name__}Value")
-        return parse(str(obj), False)
-    if isinstance(obj, list):
-        array_list = ArrayList()
-        for value in obj:
-            java_value = to_java(value)
-            array_list.add(java_value)
+        parse_value = getattr(km.DataTypes, f"parse{type(obj).__name__}Value")
+        return_default = False
+        return parse_value(str(obj), return_default)
 
-        data_type = next(iter(array_list)).getType()
-        size = array_list.size()
-        return km.ArrayValue(km.AggregateType(data_type, size), array_list)
-    if isinstance(obj, dict):
-        tree_map = TreeMap()
-        for key, value in obj.items():
-            java_key = to_java(key)
-            java_value = to_java(value)
-            tree_map.put(java_key, java_value)
+    if isinstance(obj, collections.abc.Mapping):
+        jmap = TreeMap()
+        for k, v in obj.items():
+            jk = to_java(k)
+            jv = to_java(v)
+            jmap.put(jk, jv)
+        data_type = jmap.getFirstEntry().getValue().getType()
+        index_type = jmap.getFirstEntry().getKey().getType()
+        aggregate_type = km.AggregateType(data_type, index_type)
+        return km.MapValue(aggregate_type, jmap)
 
-        data_type = tree_map.getFirstEntry().getValue().getType()
-        index_type = tree_map.getFirstEntry().getKey().getType()
-        return km.MapValue(km.AggregateType(data_type, index_type), tree_map)
+    if isinstance(obj, collections.abc.Iterable):
+        jlist = ArrayList()
+        for item in obj:
+            jitem = to_java(item)
+            jlist.add(jitem)
+        data_type = jlist.get(0).getType()
+        size = jlist.size()
+        aggregate_type = km.AggregateType(data_type, size)
+        return km.ArrayValue(aggregate_type, jlist)
 
-    raise TypeError(f"unsupported argument type {type(obj).__name__!r}")
+    raise TypeError(f"unsupported type: {type(obj).__name__!r}")
 
 
-def from_java(obj):
-    java_type = obj.getType().getType()
-    if java_type in [km.DataTypes.TYPE_VOID, km.DataTypes.TYPE_ANY]:
+def to_python(obj):
+    jtype = obj.getType().getType()
+    jname = obj.getType().getName()
+
+    if jtype in [km.DataTypes.TYPE_VOID, km.DataTypes.TYPE_ANY]:
         return None
-    if java_type in simple_types:
-        return simple_types[java_type](obj.toJSON())
-    if java_type == km.DataTypes.TYPE_AGGREGATE and isinstance(obj.content, list):
-        return [from_java(x) for x in obj.content]
-    if java_type == km.DataTypes.TYPE_AGGREGATE and isinstance(obj.content, TreeMap):
-        return {from_java(e.key): from_java(e.value) for e in obj.content.entrySet()}
+    if jtype in simple_types:
+        return simple_types[jtype](obj.toJSON())
+    if jtype == km.DataTypes.TYPE_AGGREGATE and isinstance(obj.content, TreeMap):
+        return {to_python(x.key): to_python(x.value) for x in obj.content.entrySet()}
+    if jtype == km.DataTypes.TYPE_AGGREGATE and isinstance(obj.content, list):
+        return [to_python(x) for x in obj.content]
 
-    raise TypeError(
-        f"unsupported return type {java_type!r}: {obj.getType().getName()!r}"
-    )
+    raise TypeError(f"unsupported type: {jtype!r} ({jname!r})")
 
 
 def ashref(command=""):
@@ -112,7 +117,7 @@ def script(lines, raw=False):
     interpreter = km.AshRuntime()
     interpreter.validate(None, stream)
     value = interpreter.execute("main", None)
-    return value if raw else from_java(value)
+    return value if raw else to_python(value)
 
 
 class AshFunction:
@@ -122,8 +127,9 @@ class AshFunction:
 
     def __call__(self, *args, raw=False):
         interpreter = km.AshRuntime()
-        value = self.func(interpreter, *[to_java(arg) for arg in args])
-        return value if raw else from_java(value)
+        jargs = [to_java(arg) for arg in args]
+        value = self.func(interpreter, *jargs)
+        return value if raw else to_python(value)
 
     @property
     def signatures(self):
