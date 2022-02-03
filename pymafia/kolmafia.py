@@ -11,6 +11,10 @@ JENKINS_JOB_URL = "https://ci.kolmafia.us/job/Kolmafia/lastSuccessfulBuild/"
 JAVA_PATTERN = "(net\\/sourceforge\\/kolmafia.*\\/([^\\$]*))\\.class"
 
 
+class MafiaError(Exception):
+    pass
+
+
 class KoLmafia:
     def __init__(self, location=JAR_LOCATION):
         if path.isfile(location) is False:
@@ -18,11 +22,12 @@ class KoLmafia:
 
         # fmt: off
         jnius_config.set_classpath(location)
-        from jnius import autoclass, cast # pylint: disable=import-outside-toplevel,no-name-in-module
+        from jnius import autoclass, cast  # pylint: disable=import-outside-toplevel,no-name-in-module
         # fmt: on
 
         self.autoclass = autoclass
         self.cast = cast
+
         self.classes = {}
         with zipfile.ZipFile(location) as archive:
             for file in archive.filelist:
@@ -41,9 +46,11 @@ class KoLmafia:
             request.urlretrieve(jar_url, filename=location)
 
     def __getattr__(self, key):
+        # if km.StaticEntity.getContinuationState().toString() in ["ABORT", "ERROR"]:
+        #     raise MafiaError(km.KoLmafia.getLastMessage())
         if key in self.classes:
             return self.autoclass(self.classes[key])
-        raise AttributeError(f"{type(self).__name__!r} object has no attribute {key!r}")
+        return self.autoclass(key)
 
 
 km = KoLmafia()
