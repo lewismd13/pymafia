@@ -1,0 +1,1 @@
+from pymafia.challenge_paths import community_service
