@@ -1,4 +1,6 @@
-from pymafia import Familiar, have as _have, km, Location
+from pymafia.kolmafia import km
+from pymafia.types import Familiar, Location
+from pymafia.utils import have as _have
 
 familiar = Familiar("Machine Elf")
 location = Location("The Deep Machine Tunnels")

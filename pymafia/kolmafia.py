@@ -1,10 +1,10 @@
+import json
+import re
+import zipfile
 from os import path
 from urllib import request
-import json
-import zipfile
-import re
-import jnius_config
 
+import jnius_config
 
 JAR_LOCATION = "./kolmafia.jar"
 JENKINS_JOB_URL = "https://ci.kolmafia.us/job/Kolmafia/lastSuccessfulBuild/"
@@ -16,10 +16,8 @@ class KoLmafia:
         if path.isfile(location) is False:
             self.download(location)
 
-        # fmt: off
         jnius_config.set_classpath(location)
-        from jnius import autoclass, cast # pylint: disable=import-outside-toplevel,no-name-in-module
-        # fmt: on
+        from jnius import autoclass, cast  # pylint: disable=C,E
 
         self.autoclass = autoclass
         self.cast = cast

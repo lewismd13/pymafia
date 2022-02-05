@@ -1,4 +1,8 @@
-from pymafia import ash, get_property, have as _have, Item, Location
+from pymafia.types import Item, Location
+from pymafia.utils import get_property
+from pymafia.utils import have as _have
+
+from pymafia import ash
 
 item = Item("protonic accelerator pack")
 

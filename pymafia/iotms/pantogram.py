@@ -1,4 +1,7 @@
-from pymafia import ash, Element, have as _have, Item, Stat
+from pymafia.types import Element, Item, Stat
+from pymafia.utils import have as _have
+
+from pymafia import ash
 
 item = Item("portable pantogram")
 pants = Item("pantogram pants")

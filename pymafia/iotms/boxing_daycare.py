@@ -1,4 +1,6 @@
-from pymafia import ash, get_property
+from pymafia.utils import get_property
+
+from pymafia import ash
 
 
 def have():

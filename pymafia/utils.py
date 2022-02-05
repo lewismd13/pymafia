@@ -1,9 +1,10 @@
-from html import escape
 from collections import namedtuple
-from pymafia.kolmafia import km
-from pymafia.types import Item, Skill, Effect, Familiar, Servant
-from pymafia import ash
+from html import escape
 
+from pymafia.kolmafia import km
+from pymafia.types import Effect, Familiar, Item, Servant, Skill
+
+from pymafia import ash
 
 ByteArrayOutputStream = km.autoclass("java.io.ByteArrayOutputStream")
 PrintStream = km.autoclass("java.io.PrintStream")

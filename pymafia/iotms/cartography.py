@@ -1,5 +1,11 @@
 import re
-from pymafia import ash, get_property, have as _have, Macro, Skill
+
+from pymafia.combat import Macro
+from pymafia.types import Skill
+from pymafia.utils import get_property
+from pymafia.utils import have as _have
+
+from pymafia import ash
 
 passive = Skill("Comprehensive Cartography")
 skill = Skill("Map the Monsters")

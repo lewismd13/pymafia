@@ -1,4 +1,8 @@
-from pymafia import ash, get_property, Item, Macro, Monster
+from pymafia.combat import Macro
+from pymafia.types import Item, Monster
+from pymafia.utils import get_property
+
+from pymafia import ash
 
 item = Item("Witchess Set")
 
