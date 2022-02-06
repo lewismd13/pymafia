@@ -1,10 +1,9 @@
-from enum import IntEnum
-from collections import namedtuple
+from enum import Enum
 from pymafia import ash
 from pymafia.utils import get_property
 
 
-class Test(namedtuple("Test", ["id", "name", "expression"]), IntEnum):
+class Test(Enum):
     # fmt: off
     HP = (1, "Donate Blood", "HP")
     MUSCLE = (2, "Feed The Children", "Muscle")
@@ -20,14 +19,21 @@ class Test(namedtuple("Test", ["id", "name", "expression"]), IntEnum):
     DONATE = (30, "Donate Your Body To Science", "")
     # fmt: on
 
-    def __new__(cls, *args):
-        obj = super().__new__(cls, *args)
-        obj._value_ = obj.id
+    def __new__(cls, id_, service, expression):
+        obj = object.__new__(cls)
+        obj._value_ = id_
+        obj.id = id_
+        obj.service = service
+        obj.expression = expression
         return obj
+
+    def maximize(self):
+        if self.expression:
+            ash.maximize(self.expression)
 
     def is_done(self):
         """Check if mafia currently believes this test is complete."""
-        return get_property("kingLiberated", bool) or self.name in get_property("csServicesPerformed").split(",")
+        return get_property("kingLiberated", bool) or self.service in get_property("csServicesPerformed").split(",")
 
     def do(self):
         """Attempt to turn in the test to the Council of Loathing."""
