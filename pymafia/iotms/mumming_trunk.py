@@ -38,7 +38,4 @@ def apply_costume(costume):
         raise RuntimeError("need to have a familiar to put a costume on")
 
     choice = costume_choices[costume]
-    success = ash.cli_execute(f"mummery {choice}")
-
-    if not success:
-        raise RuntimeError(f"failed to apply the {costume!r} costume")
+    ash.cli_execute(f"mummery {choice}")

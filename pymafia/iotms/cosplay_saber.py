@@ -38,7 +38,4 @@ def upgrade(new_upgrade):
     if new_upgrade not in upgrade_choices:
         raise ValueError(f"unknown upgrade: {new_upgrade!r}")
 
-    success = ash.cli_execute(f"saber {new_upgrade}")
-
-    if not success:
-        raise RuntimeError("failed to upgrade the saber with {new_upgrade!r}")  # fmt: skip
+    ash.cli_execute(f"saber {new_upgrade}")

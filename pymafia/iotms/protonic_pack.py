@@ -29,7 +29,4 @@ def cross_streams():
     if streams_crossed():
         raise RuntimeError("already crossed streams today")
 
-    success = ash.cli_execute("crossstreams")
-
-    if not success:
-        raise RuntimeError("failed to cross streams")
+    ash.cli_execute("crossstreams")

@@ -1,9 +1,8 @@
-import re
-
 from pymafia.combat import Macro
 from pymafia.types import Skill
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
+from pymafia.utils import in_choice, in_combat
 
 from pymafia import ash
 
@@ -31,10 +30,9 @@ def map_monster(location, monster, macro=Macro()):
     if not get_property("mappingMonsters"):
         ash.use_skill(skill)
     ash.visit_url(location.url)
-    if not ash.handling_choice() or ash.last_choice() != 1435:
-        raise RuntimeError("failed to encounter the Map the Monsters noncombat adventure")  # fmt: skip
-    page = ash.visit_url(f"choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink={monster.id}")  # fmt: skip
-    match = re.search("<!-- MONSTERID: (\\d+) -->", page)
-    if not match or int(match.group(1)) != monster.id:
-        raise RuntimeError(f"failed to enter combat with monster: {monster!r}")
+    if not in_choice(1435):
+        raise RuntimeError("failed to encounter the Leading Yourself Right to Them noncombat adventure")  # fmt: skip
+    ash.visit_url(f"choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink={monster.id}")  # fmt: skip
+    if not in_combat(monster):
+        raise RuntimeError(f"failed to start fight with {monster!r}")
     ash.run_combat(macro)
