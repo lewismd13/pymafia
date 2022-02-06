@@ -1,4 +1,7 @@
-from pymafia import get_property, Location, ash
+from pymafia.types import Location
+from pymafia.utils import get_property
+
+from pymafia import ash
 
 location = Location("The X-32-F Combat Training Snowman")
 

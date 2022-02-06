@@ -1,4 +1,8 @@
-from pymafia import ash, Effect, get_property, Item, Location, Macro, set_property
+from pymafia.combat import Macro
+from pymafia.types import Effect, Item, Location
+from pymafia.utils import get_property, set_property
+
+from pymafia import ash
 
 equipment_choices = {
     Item("LOV Eardigan"): 1,

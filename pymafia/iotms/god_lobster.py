@@ -1,4 +1,9 @@
-from pymafia import ash, Familiar, get_property, have as _have, Item, Macro
+from pymafia.combat import Macro
+from pymafia.types import Familiar, Item
+from pymafia.utils import get_property
+from pymafia.utils import have as _have
+
+from pymafia import ash
 
 familiar = Familiar("God Lobster")
 

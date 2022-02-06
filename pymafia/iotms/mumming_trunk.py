@@ -1,4 +1,8 @@
-from pymafia import ash, get_property, have as _have, Item
+from pymafia.types import Item
+from pymafia.utils import get_property
+from pymafia.utils import have as _have
+
+from pymafia import ash
 
 item = Item("mumming trunk")
 
@@ -34,7 +38,4 @@ def apply_costume(costume):
         raise RuntimeError("need to have a familiar to put a costume on")
 
     choice = costume_choices[costume]
-    success = ash.cli_execute(f"mummery {choice}")
-
-    if not success:
-        raise RuntimeError(f"failed to apply the {costume!r} costume")
+    ash.cli_execute(f"mummery {choice}")

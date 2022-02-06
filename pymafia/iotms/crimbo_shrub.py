@@ -1,4 +1,8 @@
-from pymafia import ash, Element, Familiar, get_property, have as _have, Item, Stat
+from pymafia.types import Element, Familiar, Item, Stat
+from pymafia.utils import get_property
+from pymafia.utils import have as _have
+
+from pymafia import ash
 
 familiar = Familiar("Crimbo Shrub")
 decorations = Item("box of old Crimbo decorations")

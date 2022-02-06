@@ -1,4 +1,9 @@
-from pymafia import Familiar, have as _have, km, Location
+from pymafia.kolmafia import km
+from pymafia.types import Familiar, Location
+from pymafia.utils import get_property
+from pymafia.utils import have as _have
+
+from pymafia import ash
 
 familiar = Familiar("Machine Elf")
 location = Location("The Deep Machine Tunnels")
@@ -17,3 +22,7 @@ def fights_today():
 def fights_left():
     """Free Deep Machine Tunnel fights left today."""
     return 5 - fights_today()
+
+
+def can_duplicate():
+    return get_property("lastDMTDuplication", int) < ash.my_ascensions()

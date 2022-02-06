@@ -1,10 +1,10 @@
+import json
+import re
+import zipfile
 from os import path
 from urllib import request
-import json
-import zipfile
-import re
-import jnius_config
 
+import jnius_config
 
 JAR_LOCATION = "./kolmafia.jar"
 JENKINS_JOB_URL = "https://ci.kolmafia.us/job/Kolmafia/lastSuccessfulBuild/"
