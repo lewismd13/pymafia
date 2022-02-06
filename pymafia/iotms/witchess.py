@@ -34,6 +34,7 @@ def fights_left():
 
 
 def fight(piece, macro=Macro()):
+    """Fight a Witchess piece."""
     if not have():
         raise RuntimeError("need a Witchess Set installed")
     if fights_left() < 1:
