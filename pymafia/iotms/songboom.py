@@ -1,4 +1,8 @@
-from pymafia import ash, get_property, have as _have, Item
+from pymafia.types import Item
+from pymafia.utils import get_property
+from pymafia.utils import have as _have
+
+from pymafia import ash
 
 item = Item("SongBoom™ BoomBox")
 
@@ -36,10 +40,7 @@ def set_song(new_song):
     if song_changes_left() < 1:
         raise RuntimeError("out of song changes")
 
-    success = ash.cli_execute(f"boombox {song_keywords[new_song]}")
-
-    if not success:
-        raise RuntimeError(f"failed to set song to {new_song!r}")
+    ash.cli_execute(f"boombox {song_keywords[new_song]}")
 
 
 def drop_progress():

@@ -1,4 +1,6 @@
-from pymafia import ash, get_property
+from pymafia.utils import get_property
+
+from pymafia import ash
 
 
 def have():
@@ -13,10 +15,7 @@ def daydream():
     if get_property("_daycareNap", bool):
         return
 
-    success = ash.cli_execute("daycare item")
-
-    if not success:
-        raise RuntimeError("failed to have a Boxing Daydream")
+    ash.cli_execute("daycare item")
 
 
 def free_scavenge():
