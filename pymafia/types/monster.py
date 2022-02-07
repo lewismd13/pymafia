@@ -30,7 +30,7 @@ class Monster:
         return hash((self.id, self.name))
 
     def __str__(self):
-        return f"[{self.id}]{self.name}" if self else self.name
+        return f"[{self.id}]{self.name}" if self.id != 0 else self.name
 
     def __repr__(self):
         return f"{type(self).__name__}({str(self)!r})"
@@ -42,7 +42,7 @@ class Monster:
         )
 
     def __bool__(self):
-        return self.id != 0
+        return self.name != "none"
 
     @property
     def base_hp(self):

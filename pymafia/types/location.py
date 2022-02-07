@@ -44,7 +44,7 @@ class Location:
         )
 
     def __bool__(self):
-        return self.id != -1
+        return self.name != "none"
 
     @property
     def url(self):

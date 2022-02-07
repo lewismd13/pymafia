@@ -48,7 +48,7 @@ class Effect:
         )
 
     def __bool__(self):
-        return self.id != -1
+        return self.name != "none"
 
     @property
     def default(self):

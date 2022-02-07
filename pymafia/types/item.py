@@ -62,7 +62,7 @@ class Item:
         )
 
     def __bool__(self):
-        return self.id != -1
+        return self.name != "none"
 
     @cached_property
     def plural(self):

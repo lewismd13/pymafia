@@ -1,4 +1,7 @@
+from functools import cached_property
+
 from pymafia.kolmafia import km
+from pymafia.types import Item
 
 from pymafia import ash
 
@@ -42,4 +45,12 @@ class Familiar:
         )
 
     def __bool__(self):
-        return self.id != -1
+        return self.name != "none"
+
+    @cached_property
+    def hatchling(self):
+        return Item(km.FamiliarDatabase.getFamiliarLarva(self.id))
+
+    @property
+    def nickname(self):
+        return km.KoLCharacter.findFamiliar(self.name).getName()

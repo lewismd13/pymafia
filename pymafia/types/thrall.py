@@ -42,4 +42,4 @@ class Thrall:
         )
 
     def __bool__(self):
-        return self.id != 0
+        return self.name != "none"
