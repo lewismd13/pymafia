@@ -4,7 +4,7 @@ from pymafia.types.coinmaster import Coinmaster
 from pymafia.types.effect import Effect, EffectQuality
 from pymafia.types.element import Element
 from pymafia.types.familiar import Familiar
-from pymafia.types.item import Item, ItemQuality
+from pymafia.types.item import CandyType, Item, ItemQuality
 from pymafia.types.location import Location
 from pymafia.types.monster import Monster
 from pymafia.types.phylum import Phylum

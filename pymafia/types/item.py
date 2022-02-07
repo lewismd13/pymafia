@@ -7,12 +7,19 @@ from pymafia import ash
 
 
 class ItemQuality(Enum):
-    NONE = None
+    NONE = ""
     CRAPPY = "crappy"
     DECENT = "decent"
     GOOD = "good"
     AWESOME = "awesome"
     EPIC = "EPIC"
+
+
+class CandyType(Enum):
+    NONE = "none"
+    UNSPADED = "unspaded"
+    SIMPLE = "simple"
+    COMPLEX = "complex"
 
 
 class Item:
@@ -88,7 +95,7 @@ class Item:
     @cached_property
     def quality(self):
         """Return the quality of the Item if it is a consumable."""
-        return ItemQuality(km.ConsumablesDatabase.getRawQuality(self.name))
+        return ItemQuality(km.ConsumablesDatabase.getQuality(self.name))
 
     @cached_property
     def adventures(self):
@@ -183,23 +190,26 @@ class Item:
 
     @cached_property
     def combat(self):
-        """Whether the Item is usable in combat."""
+        """Return True if the Item is usable in combat, else False. This returns True whether the Item is consumed by being used or not."""
         return km.ItemDatabase.getAttribute(
             self.id, km.ItemDatabase.ATTR_COMBAT | km.ItemDatabase.ATTR_COMBAT_REUSABLE
         )
 
     @cached_property
     def combat_reusable(self):
+        """Return True if the Item is usable in combat and is not consumed when doing so, else False."""
         return km.ItemDatabase.getAttribute(
             self.id, km.ItemDatabase.ATTR_COMBAT_REUSABLE
         )
 
     @cached_property
     def usable(self):
+        """Return True if the Item is usable, else False. This returns True whether the Item is consumed by being used or not."""
         return km.ItemDatabase.isUsable(self.id)
 
     @cached_property
     def reusable(self):
+        """Return True if the Item is usable and is not consumed when doing so, else False."""
         return km.ItemDatabase.getConsumptionType(
             self.id
         ) == km.KoLConstants.INFINITE_USES or km.ItemDatabase.getAttribute(
@@ -208,62 +218,76 @@ class Item:
 
     @cached_property
     def multi(self):
+        """Return True if the Item is multiusable, else False."""
         return km.ItemDatabase.isMultiUsable(self.id)
 
     @cached_property
     def fancy(self):
+        """Return True if the Item is a "fancy" ingredient, else False."""
         return km.ItemDatabase.isFancyItem(self.id)
 
     @cached_property
     def pasteable(self):
+        """Return True if the Item is a meatpasting ingredient, else False."""
         return km.ItemDatabase.isPasteable(self.id)
 
     @cached_property
     def smithable(self):
+        """Return True if the Item is a meatsmithing ingredient, else False."""
         return km.ItemDatabase.isSmithable(self.id)
 
     @cached_property
     def cookable(self):
+        """Return True if the Item is a cooking ingredient, else False."""
         return km.ItemDatabase.isCookable(self.id)
 
     @cached_property
     def mixable(self):
+        """Return True if the Item is a cocktailcrafting ingredient, else False."""
         return km.ItemDatabase.isMixable(self.id)
 
     @cached_property
     def candy(self):
+        """Return True if the Item is a candy, else False."""
         return km.ItemDatabase.isCandyItem(self.id)
 
     @cached_property
     def candy_type(self):
-        return km.CandyDatabase.getCandyType(self.id)
+        """Return the candy type of the Item."""
+        return CandyType(km.CandyDatabase.getCandyType(self.id))
 
     @cached_property
     def chocolate(self):
+        """Return True if the Item is a chocolate, else False."""
         return km.ItemDatabase.isChocolateItem(self.id)
 
     @cached_property
     def seller(self):
+        """Return which Coinmaster sells this Item, if any."""
         return ash.to_python(
             km.DataTypes.makeCoinmasterValue(km.CoinmasterRegistry.findSeller(self.id))
         )
 
     @cached_property
     def buyer(self):
+        """Return which Coinmaster buys this Item, if any."""
         return ash.to_python(
             km.DataTypes.makeCoinmasterValue(km.CoinmasterRegistry.findBuyer(self.id))
         )
 
     @cached_property
     def name_length(self):
+        """Return the length of the Item's display name."""
         return km.ItemDatabase.getNameLength(self.id)
 
     @cached_property
     def noob_skill(self):
+        """Return the noob Skill granted by absorbing this Item."""
         return ash.to_python(
             km.DataTypes.makeSkillValue(km.ItemDatabase.getNoobSkillId(self.id), True)
         )
 
-    @cached_property
+    @property
     def tcrs_name(self):
+        """Return the name of the Item as it appears in your current Two Crazy Random Summer run. If you are not in a TCRS run, the regular Item name is returned."""
         return km.TCRSDatabase.getTCRSName(self.id)
