@@ -19,7 +19,7 @@ class Coinmaster:
     @classmethod
     def all(cls):
         values = km.DataTypes.COINMASTER_TYPE.allValues()
-        return sorted(ash.from_java(values), key=lambda x: x.name)
+        return sorted(ash.to_python(values), key=lambda x: x.name)
 
     def __hash__(self):
         return hash(self.name)

@@ -1,6 +1,14 @@
+from enum import IntEnum
+
 from pymafia.kolmafia import km
 
 from pymafia import ash
+
+
+class EffectQuality(IntEnum):
+    GOOD = 0
+    NEUTRAL = 1
+    BAD = 2
 
 
 class Effect:
@@ -22,7 +30,7 @@ class Effect:
     @classmethod
     def all(cls):
         values = km.DataTypes.EFFECT_TYPE.allValues()
-        return sorted(ash.from_java(values), key=lambda x: x.id)
+        return sorted(ash.to_python(values), key=lambda x: x.id)
 
     def __hash__(self):
         return hash((self.id, self.name))

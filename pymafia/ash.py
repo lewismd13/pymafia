@@ -1,4 +1,5 @@
 import collections
+
 from pymafia.kolmafia import km
 from pymafia.types import (
     Bounty,

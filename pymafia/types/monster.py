@@ -24,7 +24,7 @@ class Monster:
     @classmethod
     def all(cls):
         values = km.DataTypes.MONSTER_TYPE.allValues()
-        return sorted(ash.from_java(values), key=lambda x: x.id)
+        return sorted(ash.to_python(values), key=lambda x: x.id)
 
     def __hash__(self):
         return hash((self.id, self.name))

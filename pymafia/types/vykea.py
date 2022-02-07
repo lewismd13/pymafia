@@ -26,7 +26,7 @@ class Vykea:
     @classmethod
     def all(cls):
         values = km.DataTypes.VYKEA_TYPE.allValues()
-        return ash.from_java(values)
+        return ash.to_python(values)
 
     def __hash__(self):
         return hash((self.type, self.level, self.rune))
