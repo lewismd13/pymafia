@@ -29,15 +29,15 @@ class Effect:
         self.id = id_
         self.name = name
 
-    def __hash__(self):
-        return hash((self.id, self.name))
-
     def __str__(self):
         ids = km.EffectDatabase.getEffectIds(self.name, False)
         return f"[{self.id}]{self.name}" if len(ids) > 1 else self.name
 
     def __repr__(self):
         return f"{type(self).__name__}({str(self)!r})"
+
+    def __hash__(self):
+        return hash((self.id, self.name))
 
     def __eq__(self, other):
         return isinstance(other, type(self)) and (self.id, self.name) == (

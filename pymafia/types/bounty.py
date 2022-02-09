@@ -31,14 +31,14 @@ class Bounty:
         canonical = bounties[0]
         self.name = km.BountyDatabase.canonicalToName(canonical)
 
-    def __hash__(self):
-        return hash(self.name)
-
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return f"{type(self).__name__}({str(self)!r})"
+
+    def __hash__(self):
+        return hash(self.name)
 
     def __eq__(self, other):
         return isinstance(other, type(self)) and self.name == other.name

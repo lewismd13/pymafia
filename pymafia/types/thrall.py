@@ -25,17 +25,20 @@ class Thrall:
         self.name = data[0]
         self.data = data
 
-    def __hash__(self):
-        return hash((self.id, self.name))
-
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return f"{type(self).__name__}({str(self)!r})"
 
+    def __hash__(self):
+        return hash((self.id, self.name))
+
     def __eq__(self, other):
-        return isinstance(other, type(self)) and (self.id, self.name) == (other.id, other.name)
+        return isinstance(other, type(self)) and (self.id, self.name) == (
+            other.id,
+            other.name,
+        )
 
     def __bool__(self):
         return self != type(self)()

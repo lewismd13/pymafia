@@ -30,17 +30,21 @@ class Vykea:
         self.name = companion.getName()
         self.companion = companion
 
-    def __hash__(self):
-        return hash((self.type_, self.rune, self.level))
-
     def __str__(self):
         return self.companion.toString()
 
     def __repr__(self):
         return f"{type(self).__name__}({str(self)!r})"
 
+    def __hash__(self):
+        return hash((self.type_, self.rune, self.level))
+
     def __eq__(self, other):
-        return isinstance(other, type(self)) and (self.type_, self.rune, self.level) == (other.type_, other.rune, other.level)
+        return isinstance(other, type(self)) and (
+            self.type_,
+            self.rune,
+            self.level,
+        ) == (other.type_, other.rune, other.level)
 
     def __bool__(self):
         return self != type(self)()
