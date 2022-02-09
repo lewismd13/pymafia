@@ -1,4 +1,4 @@
-from pymafia.types.bounty import Bounty
+from pymafia.types.bounty import Bounty, KoLBountyType, MafiaBountyType
 from pymafia.types.class_ import Class
 from pymafia.types.coinmaster import Coinmaster
 from pymafia.types.effect import Effect, EffectQuality

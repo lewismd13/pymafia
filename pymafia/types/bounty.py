@@ -1,25 +1,35 @@
+from enum import Enum
+
 from pymafia.kolmafia import km
 
-from pymafia import ash
+from pymafia import ash, types
+
+
+class MafiaBountyType(Enum):
+    EASY = "easy"
+    HARD = "hard"
+    SPECIAL = "special"
+
+
+class KoLBountyType(Enum):
+    LOW = "low"
+    HIGH = "high"
 
 
 class Bounty:
-    def __init__(self, key):
-        if key in (None, "none"):
-            self.name = "none"
+    name = "none"
+
+    def __init__(self, key=None):
+        if key in (None, self.name):
             return
 
-        bounties = km.BountyDatabase.getMatchingNames(key).toArray()
+        bounties = km.BountyDatabase.getMatchingNames(key)
 
         if len(bounties) != 1:
             raise NameError(f"{type(self).__name__} {key!r} not found")
 
-        self.name = bounties[0]
-
-    @classmethod
-    def all(cls):
-        values = km.DataTypes.BOUNTY_TYPE.allValues()
-        return sorted(ash.to_python(values), key=lambda x: x.name)
+        canonical = bounties[0]
+        self.name = km.BountyDatabase.canonicalToName(canonical)
 
     def __hash__(self):
         return hash(self.name)
@@ -34,4 +44,43 @@ class Bounty:
         return isinstance(other, type(self)) and self.name == other.name
 
     def __bool__(self):
-        return self.name != "none"
+        return self != type(self)()
+
+    @classmethod
+    def all(cls):
+        values = km.DataTypes.BOUNTY_TYPE.allValues()
+        return sorted(ash.to_python(values), key=lambda x: x.name)
+
+    @property
+    def plural(self):
+        return km.BountyDatabase.getPlural(self.name) or ""
+
+    @property
+    def type_(self):
+        return MafiaBountyType(km.BountyDatabase.getType(self.name))
+
+    @property
+    def kol_internal_type(self):
+        if self.type_ is MafiaBountyType.EASY:
+            return KoLBountyType.LOW
+        if self.type_ is MafiaBountyType.HARD:
+            return KoLBountyType.HIGH
+        return None
+
+    @property
+    def number(self):
+        return km.BountyDatabase.getNumber(self.name)
+
+    @property
+    def image(self):
+        return km.BountyDatabase.getImage(self.name)
+
+    @property
+    def monster(self):
+        return types.Monster(km.BountyDatabase.getMonster(self.name)) if self else None
+
+    @property
+    def location(self):
+        return (
+            types.Location(km.BountyDatabase.getLocation(self.name)) if self else None
+        )

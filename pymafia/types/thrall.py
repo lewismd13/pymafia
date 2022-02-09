@@ -1,30 +1,29 @@
 from pymafia.kolmafia import km
 
-from pymafia import ash
+from pymafia import ash, types
 
 
 class Thrall:
-    def __init__(self, key):
-        if key in (None, 0, "none"):
-            self.id = 0
-            self.name = "none"
+    id = 0
+    name = "none"
+    data = None
+
+    def __init__(self, key=None):
+        if key in (None, self.id, self.name):
             return
 
-        if isinstance(key, str):
-            data = km.PastaThrallData.typeToData(key)
-        else:
-            data = km.PastaThrallData.idToData(int(key))
+        data = (
+            km.PastaThrallData.typeToData(key)
+            if isinstance(key, str)
+            else km.PastaThrallData.idToData(key)
+        )
 
         if data is None:
             raise NameError(f"{type(self).__name__} {key!r} not found")
 
         self.id = data[1]
         self.name = data[0]
-
-    @classmethod
-    def all(cls):
-        values = km.DataTypes.THRALL_TYPE.allValues()
-        return sorted(ash.to_python(values), key=lambda x: x.id)
+        self.data = data
 
     def __hash__(self):
         return hash((self.id, self.name))
@@ -36,10 +35,36 @@ class Thrall:
         return f"{type(self).__name__}({str(self)!r})"
 
     def __eq__(self, other):
-        return isinstance(other, type(self)) and (self.id, self.name) == (
-            other.id,
-            other.name,
-        )
+        return isinstance(other, type(self)) and (self.id, self.name) == (other.id, other.name)
 
     def __bool__(self):
-        return self.name != "none"
+        return self != type(self)()
+
+    @classmethod
+    def all(cls):
+        values = km.DataTypes.THRALL_TYPE.allValues()
+        return sorted(ash.to_python(values), key=lambda x: x.id)
+
+    @property
+    def thrall(self):
+        return km.KoLCharacter.findPastaThrall(self.name)
+
+    @property
+    def level(self):
+        return self.thrall.getLevel() if self else 0
+
+    @property
+    def image(self):
+        return self.data[6] if self else None
+
+    @property
+    def tinyimage(self):
+        return self.data[7] if self else None
+
+    @property
+    def skill(self):
+        return types.Skill(self.data[3]) if self else None
+
+    @property
+    def current_modifiers(self):
+        return self.thrall.getCurrentModifiers() if self else None

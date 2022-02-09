@@ -1,25 +1,23 @@
 from pymafia.kolmafia import km
 
-from pymafia import ash
+from pymafia import ash, types
 
 
 class Coinmaster:
-    def __init__(self, key):
-        if key in (None, "none"):
-            self.name = "none"
+    name = "none"
+    coinmaster = None
+
+    def __init__(self, key=None):
+        if key in (None, self.name):
             return
 
-        coinmaster_data = km.CoinmasterRegistry.findCoinmaster(key)
+        coinmaster = km.CoinmasterRegistry.findCoinmaster(key)
 
-        if coinmaster_data is None:
+        if coinmaster is None:
             raise NameError(f"{type(self).__name__} {key!r} not found")
 
-        self.name = coinmaster_data.getMaster()
-
-    @classmethod
-    def all(cls):
-        values = km.DataTypes.COINMASTER_TYPE.allValues()
-        return sorted(ash.to_python(values), key=lambda x: x.name)
+        self.name = coinmaster.getMaster()
+        self.coinmaster = coinmaster
 
     def __hash__(self):
         return hash(self.name)
@@ -34,4 +32,40 @@ class Coinmaster:
         return isinstance(other, type(self)) and self.name == other.name
 
     def __bool__(self):
-        return self.name != "none"
+        return self != type(self)()
+
+    @classmethod
+    def all(cls):
+        values = km.DataTypes.COINMASTER_TYPE.allValues()
+        return sorted(ash.to_python(values), key=lambda x: x.name)
+
+    @property
+    def token(self):
+        return self.coinmaster.getToken() if self else None
+
+    @property
+    def item(self):
+        if not self:
+            return None
+        item = self.coinmaster.getItem()
+        return None if item is None else types.Item(item.getItemId())
+
+    @property
+    def property_(self):
+        return self.coinmaster.getProperty() if self else None
+
+    @property
+    def available_tokens(self):
+        return self.coinmaster.availableTokens() if self else 0
+
+    @property
+    def buys(self):
+        return self.coinmaster.getSellAction() is not None if self else False
+
+    @property
+    def sells(self):
+        return self.coinmaster.getBuyAction() is not None if self else False
+
+    @property
+    def nickname(self):
+        return self.coinmaster.getNickname() if self else None

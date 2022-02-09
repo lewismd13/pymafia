@@ -1,16 +1,25 @@
-from pymafia.kolmafia import km
-from pymafia.types import Item
+from enum import IntEnum
 
-from pymafia import ash
+from pymafia.kolmafia import km
+
+from pymafia import ash, types
+
+
+class VykeaType(IntEnum):
+    NONE = km.VYKEACompanionData.NONE
+    BOOKSHELF = km.VYKEACompanionData.BOOKSHELF
+    DRESSER = km.VYKEACompanionData.DRESSER
+    CEILING_FAN = km.VYKEACompanionData.CEILING_FAN
+    COUCH = km.VYKEACompanionData.COUCH
+    LAMP = km.VYKEACompanionData.LAMP
+    DISHRACK = km.VYKEACompanionData.DISHRACK
 
 
 class Vykea:
-    def __init__(self, key):
+    companion = km.VYKEACompanionData.NO_COMPANION
+
+    def __init__(self, key=None):
         if key in (None, "none"):
-            self.type = "unknown"
-            self.level = 0
-            self.rune = Item(None)
-            self.name = ""
             return
 
         companion = km.VYKEACompanionData.fromString(key)
@@ -18,43 +27,50 @@ class Vykea:
         if companion is None:
             raise NameError(f"{type(self).__name__} {key!r} not found")
 
-        self.type = companion.typeToString()
-        self.level = companion.getLevel()
-        self.rune = Item(companion.getRune().getItemId())
         self.name = companion.getName()
+        self.companion = companion
+
+    def __hash__(self):
+        return hash((self.type_, self.rune, self.level))
+
+    def __str__(self):
+        return self.companion.toString()
+
+    def __repr__(self):
+        return f"{type(self).__name__}({str(self)!r})"
+
+    def __eq__(self, other):
+        return isinstance(other, type(self)) and (self.type_, self.rune, self.level) == (other.type_, other.rune, other.level)
+
+    def __bool__(self):
+        return self != type(self)()
 
     @classmethod
     def all(cls):
         values = km.DataTypes.VYKEA_TYPE.allValues()
         return ash.to_python(values)
 
-    def __hash__(self):
-        return hash((self.type, self.level, self.rune))
+    @property
+    def type_(self):
+        return VykeaType(self.companion.getType())
 
-    def __str__(self):
-        if not self:
-            return "none"
+    @property
+    def rune(self):
+        item_id = self.companion.getRune().getItemId()
+        return None if item_id == types.Item.id else types.Item(item_id)
 
-        s = ""
-        if self.name:
-            s += f"{self.name}, the "
-        s += f"level {self.level} "
-        if self.rune:
-            rune = km.AdventureResult(km.AdventureResult.ITEM_PRIORITY, self.rune.name)
-            s += km.VYKEACompanionData.runeToString(rune)
-            s += " "
-        s += self.type
-        return s
+    @property
+    def level(self):
+        return self.companion.getLevel()
 
-    def __repr__(self):
-        return f"{type(self).__name__}({str(self)!r})"
+    @property
+    def image(self):
+        return self.companion.getImage()
 
-    def __eq__(self, other):
-        return isinstance(other, type(self)) and (self.type, self.level, self.rune) == (
-            other.type,
-            other.level,
-            other.rune,
-        )
+    @property
+    def modifiers(self):
+        return self.companion.getModifiers()
 
-    def __bool__(self):
-        return self.type != "unknown"
+    @property
+    def attack_element(self):
+        return types.Element(self.companion.getAttackElement().toString())

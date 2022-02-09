@@ -30,7 +30,7 @@ class Phylum(Enum):
         return self.value
 
     def __bool__(self):
-        return self.value != "none"
+        return self is not self.NONE
 
     @classmethod
     def _missing_(cls, value):

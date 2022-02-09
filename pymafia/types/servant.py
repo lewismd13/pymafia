@@ -6,25 +6,19 @@ from pymafia import ash
 class Servant:
     def __init__(self, key):
         if key in (None, 0, "none"):
-            self.id = 0
-            self.name = "none"
+            self.data = None
             return
 
-        if isinstance(key, str):
-            data = km.EdServantData.typeToData(key)
-        else:
-            data = km.EdServantData.idToData(int(key))
+        data = (
+            km.EdServantData.typeToData(key)
+            if isinstance(key, str)
+            else km.EdServantData.idToData(key)
+        )
 
         if data is None:
             raise NameError(f"{type(self).__name__} {key!r} not found")
 
-        self.id = data[2]
-        self.name = data[0]
-
-    @classmethod
-    def all(cls):
-        values = km.DataTypes.SERVANT_TYPE.allValues()
-        return sorted(ash.to_python(values), key=lambda x: x.id)
+        self.data = data
 
     def __hash__(self):
         return hash((self.id, self.name))
@@ -42,4 +36,47 @@ class Servant:
         )
 
     def __bool__(self):
-        return self.name != "none"
+        return self.data is not None
+
+    @classmethod
+    def all(cls):
+        values = km.DataTypes.SERVANT_TYPE.allValues()
+        return sorted(ash.to_python(values), key=lambda x: x.id)
+
+    @property
+    def id(self):
+        return self.data[2] if self else 0
+
+    @property
+    def name(self):
+        return self.data[0] if self else "none"
+
+    @property
+    def level(self):
+        servant = km.EdServantData.findEdServant(self.name)
+        return 0 if servant is None else servant.getLevel()
+
+    @property
+    def experience(self):
+        servant = km.EdServantData.findEdServant(self.name)
+        return 0 if servant is None else servant.getExperience()
+
+    @property
+    def image(self):
+        return self.data[3] if self else None
+
+    @property
+    def level1_ability(self):
+        return self.data[4] if self else None
+
+    @property
+    def level7_ability(self):
+        return self.data[5] if self else None
+
+    @property
+    def level14_ability(self):
+        return self.data[6] if self else None
+
+    @property
+    def level21_ability(self):
+        return self.data[7] if self else None

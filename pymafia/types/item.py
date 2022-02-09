@@ -3,7 +3,7 @@ from functools import cached_property
 
 from pymafia.kolmafia import km
 
-from pymafia import ash
+from pymafia import ash, types
 
 
 class ItemQuality(Enum):
@@ -23,25 +23,21 @@ class CandyType(Enum):
 
 
 class Item:
-    def __init__(self, key):
-        if key in (None, -1, "none"):
-            self.id = -1
-            self.name = "none"
+    id = -1
+    name = "none"
+
+    def __init__(self, key=None):
+        if key in (None, self.id, self.name):
             return
 
-        id_ = int(km.ItemDatabase.getItemId(key) if isinstance(key, str) else key)
-        name = km.ItemDatabase.getDisplayName(id_)
+        id_ = km.ItemDatabase.getItemId(key) if isinstance(key, str) else key
+        name = km.ItemDatabase.getItemDataName(id_)
 
         if name is None:
             raise NameError(f"{type(self).__name__} {key!r} not found")
 
         self.id = id_
         self.name = name
-
-    @classmethod
-    def all(cls):
-        values = km.DataTypes.ITEM_TYPE.allValues()
-        return ash.to_python(values)
 
     def __int__(self):
         return self.id
@@ -50,7 +46,8 @@ class Item:
         return hash((self.id, self.name))
 
     def __str__(self):
-        return f"[{self.id}]{self.name}" if self else self.name
+        ids = km.ItemDatabase.getItemIds(self.name, 1, False)
+        return f"[{self.id}]{self.name}" if len(ids) > 1 else self.name
 
     def __repr__(self):
         return f"{type(self).__name__}({str(self)!r})"
@@ -62,7 +59,12 @@ class Item:
         )
 
     def __bool__(self):
-        return self.name != "none"
+        return self != type(self)()
+
+    @classmethod
+    def all(cls):
+        values = km.DataTypes.ITEM_TYPE.allValues()
+        return ash.to_python(values)
 
     @cached_property
     def plural(self):
@@ -264,16 +266,14 @@ class Item:
     @cached_property
     def seller(self):
         """Return which Coinmaster sells this Item, if any."""
-        return ash.to_python(
-            km.DataTypes.makeCoinmasterValue(km.CoinmasterRegistry.findSeller(self.id))
-        )
+        data = km.CoinmasterRegistry.findSeller(self.id)
+        return None if data is None else types.Coinmaster(data.getMaster())
 
     @cached_property
     def buyer(self):
         """Return which Coinmaster buys this Item, if any."""
-        return ash.to_python(
-            km.DataTypes.makeCoinmasterValue(km.CoinmasterRegistry.findBuyer(self.id))
-        )
+        data = km.CoinmasterRegistry.findBuyer(self.id)
+        return None if data is None else types.Coinmaster(data.getMaster())
 
     @cached_property
     def name_length(self):
@@ -283,9 +283,7 @@ class Item:
     @cached_property
     def noob_skill(self):
         """Return the noob Skill granted by absorbing this Item."""
-        return ash.to_python(
-            km.DataTypes.makeSkillValue(km.ItemDatabase.getNoobSkillId(self.id), True)
-        )
+        return types.Skill(km.ItemDatabase.getNoobSkillId(self.id))
 
     @property
     def tcrs_name(self):

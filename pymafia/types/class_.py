@@ -1,31 +1,25 @@
 from pymafia.kolmafia import km
 
-from pymafia import ash
+from pymafia import ash, types
 
 
 class Class:
-    def __init__(self, key):
-        if key in (None, -1, "none"):
-            self.id = -1
-            self.name = "none"
+    id = -1
+    name = "none"
+    ascension_class = None
+
+    def __init__(self, key=None):
+        if key in (None, self.id, self.name):
             return
 
-        ascension_class = (
-            km.AscensionClass.nameToClass(key)
-            if isinstance(key, str)
-            else km.AscensionClass.idToClass(int(key))
-        )
+        ascension_class = km.AscensionClass.find(key)
 
         if ascension_class is None:
             raise NameError(f"{type(self).__name__} {key!r} not found")
 
         self.id = ascension_class.getId()
         self.name = ascension_class.getName()
-
-    @classmethod
-    def all(cls):
-        values = km.DataTypes.CLASS_TYPE.allValues()
-        return sorted(ash.to_python(values), key=lambda x: x.id)
+        self.ascension_class = ascension_class
 
     def __hash__(self):
         return hash((self.id, self.name))
@@ -43,4 +37,17 @@ class Class:
         )
 
     def __bool__(self):
-        return self.name != "none"
+        return self != type(self)()
+
+    @classmethod
+    def all(cls):
+        values = km.DataTypes.CLASS_TYPE.allValues()
+        return sorted(ash.to_python(values), key=lambda x: x.id)
+
+    @property
+    def primestat(self):
+        if not self:
+            return types.Stat.NONE
+        prime_index = self.ascension_class.getPrimeStatIndex()
+        stat_name = km.AdventureResult.STAT_NAMES[prime_index]
+        return types.Stat[stat_name.upper()]

@@ -6,19 +6,21 @@ from pymafia import ash
 
 
 class EffectQuality(IntEnum):
+    NONE = -1
     GOOD = 0
     NEUTRAL = 1
     BAD = 2
 
 
 class Effect:
-    def __init__(self, key):
-        if key in (None, -1, "none"):
-            self.id = -1
-            self.name = "none"
+    id = -1
+    name = "none"
+
+    def __init__(self, key=None):
+        if key in (None, self.id, self.name):
             return
 
-        id_ = int(km.EffectDatabase.getEffectId(key) if isinstance(key, str) else key)
+        id_ = km.EffectDatabase.getEffectId(key) if isinstance(key, str) else key
         name = km.EffectDatabase.getEffectName(id_)
 
         if name is None:
@@ -27,16 +29,12 @@ class Effect:
         self.id = id_
         self.name = name
 
-    @classmethod
-    def all(cls):
-        values = km.DataTypes.EFFECT_TYPE.allValues()
-        return sorted(ash.to_python(values), key=lambda x: x.id)
-
     def __hash__(self):
         return hash((self.id, self.name))
 
     def __str__(self):
-        return f"[{self.id}]{self.name}" if self else self.name
+        ids = km.EffectDatabase.getEffectIds(self.name, False)
+        return f"[{self.id}]{self.name}" if len(ids) > 1 else self.name
 
     def __repr__(self):
         return f"{type(self).__name__}({str(self)!r})"
@@ -48,8 +46,40 @@ class Effect:
         )
 
     def __bool__(self):
-        return self.name != "none"
+        return self != type(self)()
+
+    @classmethod
+    def all(cls):
+        values = km.DataTypes.EFFECT_TYPE.allValues()
+        return sorted(ash.to_python(values), key=lambda x: x.id)
 
     @property
     def default(self):
         return km.EffectDatabase.getDefaultAction(self.id)
+
+    @property
+    def quality(self):
+        return EffectQuality(km.EffectDatabase.getQuality(self.id))
+
+    @property
+    def attributes(self):
+        return list(km.EffectDatabase.getEffectAttributes(self.id)) if self else []
+
+    def all_(self):
+        pass
+
+    @property
+    def note(self):
+        return km.EffectDatabase.getActionNote(self.id)
+
+    @property
+    def image(self):
+        return km.EffectDatabase.getImageName(self.id) or None
+
+    @property
+    def descid(self):
+        return km.EffectDatabase.getDescriptionId(self.id)
+
+    @property
+    def candy_tier(self):
+        return km.CandyDatabase.getEffectTier(self.id)
