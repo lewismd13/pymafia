@@ -27,7 +27,6 @@ class Vykea:
         if companion is None:
             raise NameError(f"{type(self).__name__} {key!r} not found")
 
-        self.name = companion.getName()
         self.companion = companion
 
     def __str__(self):
@@ -53,6 +52,10 @@ class Vykea:
     def all(cls):
         values = km.DataTypes.VYKEA_TYPE.allValues()
         return ash.to_python(values)
+
+    @property
+    def name(self):
+        return self.companion.getName()
 
     @property
     def type_(self):
