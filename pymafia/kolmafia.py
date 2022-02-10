@@ -24,7 +24,7 @@ def unproxy(obj):
 
 
 @wrapt.decorator
-def monitor(wrapped, instance, args, kwargs):  # pylint: disable=W0613
+def monitor_mafia(wrapped, instance, args, kwargs):  # pylint: disable=W0613
     """Execute a callable and check mafia for errors.
     Wrap the result with a proxy if it is a jnius object
     """
@@ -46,7 +46,7 @@ class JniusProxy(wrapt.ObjectProxy):  # pylint: disable=W0223
     Specifying a __call__ method for non-callable jnius objects results in a jnius conversion error.
     """
 
-    @monitor
+    @monitor_mafia
     def __getattribute__(self, name):
         return super().__getattribute__(name)
 
@@ -54,14 +54,14 @@ class JniusProxy(wrapt.ObjectProxy):  # pylint: disable=W0223
 class JniusCallableProxy(JniusProxy):  # pylint: disable=W0223
     """Proxy a callable jnius object and monitor mafia for errors."""
 
-    @monitor
+    @monitor_mafia
     def __call__(self, *args, **kwargs):
         args = [unproxy(item) for item in args]
         kwargs = {k: unproxy(v) for k, v in kwargs.items()}
         return object.__getattribute__(self, "__wrapped__")(*args, **kwargs)
 
 
-@monitor
+@monitor_mafia
 def __getattr__(key):
     return autoclass(classes[key]) if key in classes else autoclass(key)
 
