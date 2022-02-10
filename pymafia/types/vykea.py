@@ -39,11 +39,15 @@ class Vykea:
         return hash((self.type_, self.rune, self.level))
 
     def __eq__(self, other):
-        return isinstance(other, type(self)) and (
-            self.type_,
-            self.rune,
-            self.level,
-        ) == (other.type_, other.rune, other.level)
+        return (
+            isinstance(other, type(self))
+            and (
+                self.type_,
+                self.rune,
+                self.level,
+            )
+            == (other.type_, other.rune, other.level)
+        )
 
     def __bool__(self):
         return self != type(self)()
