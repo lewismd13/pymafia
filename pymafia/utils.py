@@ -1,3 +1,4 @@
+import re
 from collections import namedtuple
 from html import escape
 
@@ -83,3 +84,29 @@ def have(thing, quantity=1):
     if isinstance(thing, Skill):
         return ash.have_skill(thing)
     raise TypeError(f"unsupported type {type(thing).__name__!r}")
+
+def in_choice(choice):
+    return ash.handling_choice() and ash.last_choice() == choice
+
+
+def in_combat(monster=None):
+    if ash.current_round() < 1:
+        return False
+    if monster is None:
+        return True
+
+    page = ash.visit_url("fight.php")
+    match = re.search("<!-- MONSTERID: (\\d+) -->", page)
+    if not match:
+        raise RuntimeError("unable to identify monster")
+    return int(match.group(1)) == monster.id
+
+
+def can_kmail():
+    return not (
+        ash.current_round() > 0  # In a fight
+        or ash.handling_choice()  # In a choice
+        or ash.fight_follows_choice()  # Was in a choice, gonna be in a fight
+        or ash.choice_follows_fight()  # Was in a fight, gonna be in a choice
+        or ash.in_multi_fight()  # Was in a fight, gonna be in another fight
+    )
