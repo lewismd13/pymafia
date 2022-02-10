@@ -1,9 +1,10 @@
-from html import escape
 from collections import namedtuple
-from pymafia.kolmafia import km
-from pymafia.types import Item, Skill, Effect, Familiar, Servant
-from pymafia import ash
+from html import escape
 
+import pymafia.kolmafia as km
+from pymafia.types import Effect, Familiar, Item, Servant, Skill
+
+from pymafia import ash
 
 ByteArrayOutputStream = km.autoclass("java.io.ByteArrayOutputStream")
 PrintStream = km.autoclass("java.io.PrintStream")
@@ -67,7 +68,7 @@ def set_property(name, value=""):
 
 
 def force_continue():
-    km.KoLmafia.forceContinue()
+    km.autoclass("net/sourceforge/kolmafia/KoLmafia").forceContinue()
 
 
 def have(thing, quantity=1):

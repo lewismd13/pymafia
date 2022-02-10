@@ -1,4 +1,5 @@
-from pymafia.kolmafia import km
+import pymafia.kolmafia as km
+
 from pymafia import ash
 
 

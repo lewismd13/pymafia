@@ -1,10 +1,11 @@
-from os import path
-from urllib import request
 import json
-import zipfile
+import os
 import re
-import jnius_config
+import zipfile
+from urllib import request
 
+import jnius_config
+import wrapt
 
 JAR_LOCATION = "./kolmafia.jar"
 JENKINS_JOB_URL = "https://ci.kolmafia.us/job/Kolmafia/lastSuccessfulBuild/"
@@ -15,42 +16,58 @@ class MafiaError(Exception):
     pass
 
 
-class KoLmafia:
-    def __init__(self, location=JAR_LOCATION):
-        if path.isfile(location) is False:
-            self.download(location)
+class JniusProxy(wrapt.ObjectProxy):  # pylint: disable=W0223
+    """Wrapper for jnius objects that monitors KoLmafia for errors."""
 
-        # fmt: off
-        jnius_config.set_classpath(location)
-        from jnius import autoclass, cast  # pylint: disable=import-outside-toplevel,no-name-in-module
-        # fmt: on
+    def __getattribute__(self, name):
+        attr = super().__getattribute__(name)
 
-        self.autoclass = autoclass
-        self.cast = cast
+        if not object.__getattribute__(self, "permits_continue"):
+            raise MafiaError(object.__getattribute__(self, "last_message"))
 
-        self.classes = {}
-        with zipfile.ZipFile(location) as archive:
-            for file in archive.filelist:
-                filename = file.orig_filename
-                match = re.search(JAVA_PATTERN, filename)
-                if match:
-                    self.classes[match.group(2)] = match.group(1)
+        if type(attr).__module__.startswith("jnius"):
+            return type(self)(attr)
+        return attr
 
-    @staticmethod
-    def download(location):
-        with request.urlopen(JENKINS_JOB_URL + "/api/json") as response:
-            data = json.loads(response.read().decode())
-            jar_url = (
-                JENKINS_JOB_URL + "artifact/" + data["artifacts"][0]["relativePath"]
-            )
-            request.urlretrieve(jar_url, filename=location)
+    def __call__(self, *args, **kwargs):
+        result = object.__getattribute__(self, "__wrapped__")(*args, **kwargs)
 
-    def __getattr__(self, key):
-        # if km.StaticEntity.getContinuationState().toString() in ["ABORT", "ERROR"]:
-        #     raise MafiaError(km.KoLmafia.getLastMessage())
-        if key in self.classes:
-            return self.autoclass(self.classes[key])
-        return self.autoclass(key)
+        if not object.__getattribute__(self, "permits_continue"):
+            raise MafiaError(object.__getattribute__(self, "last_message"))
+
+        if type(result).__module__.startswith("jnius"):
+            return type(self)(result)
+        return result
+
+    @property
+    def permits_continue(self):
+        return autoclass("net/sourceforge/kolmafia/KoLmafia").permitsContinue()
+
+    @property
+    def last_message(self):
+        return autoclass("net/sourceforge/kolmafia/KoLmafia").getLastMessage()
 
 
-km = KoLmafia()
+def __getattr__(key):
+    return JniusProxy(autoclass(classes[key]) if key in classes else autoclass(key))
+
+
+def download(location):
+    with request.urlopen(JENKINS_JOB_URL + "/api/json") as response:
+        data = json.loads(response.read().decode())
+        jar_url = JENKINS_JOB_URL + "artifact/" + data["artifacts"][0]["relativePath"]
+        request.urlretrieve(jar_url, filename=location)
+
+
+if not os.path.isfile(JAR_LOCATION):
+    download(JAR_LOCATION)
+jnius_config.set_classpath(JAR_LOCATION)
+from jnius import autoclass, cast  # pylint: disable=C,E,W
+
+classes = {}
+with zipfile.ZipFile(JAR_LOCATION) as archive:
+    for file in archive.filelist:
+        filename = file.orig_filename
+        match = re.search(JAVA_PATTERN, filename)
+        if match:
+            classes[match.group(2)] = match.group(1)

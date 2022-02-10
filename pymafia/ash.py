@@ -1,23 +1,22 @@
-from pymafia.kolmafia import km
+import pymafia.kolmafia as km
 from pymafia.types import (
+    Bounty,
+    Class,
+    Coinmaster,
+    Effect,
+    Element,
+    Familiar,
     Item,
     Location,
-    Class,
-    Stat,
-    Skill,
-    Effect,
-    Familiar,
-    Slot,
     Monster,
-    Element,
-    Coinmaster,
     Phylum,
-    Thrall,
-    Bounty,
     Servant,
+    Skill,
+    Slot,
+    Stat,
+    Thrall,
     Vykea,
 )
-
 
 TreeMap = km.autoclass("java.util.TreeMap")
 ArrayList = km.autoclass("java.util.ArrayList")
