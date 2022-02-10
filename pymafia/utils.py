@@ -85,6 +85,7 @@ def have(thing, quantity=1):
         return ash.have_skill(thing)
     raise TypeError(f"unsupported type {type(thing).__name__!r}")
 
+
 def in_choice(choice):
     return ash.handling_choice() and ash.last_choice() == choice
 
