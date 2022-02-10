@@ -1,15 +1,17 @@
 import re
-from collections import namedtuple
 from html import escape
 
 import pymafia.kolmafia as km
-from pymafia.types import Effect, Familiar, Item, Servant, Skill
+from pymafia.types import Effect, Familiar, Item, Monster, Servant, Skill
 
 from pymafia import ash
 
 ByteArrayOutputStream = km.autoclass("java.io.ByteArrayOutputStream")
 PrintStream = km.autoclass("java.io.PrintStream")
-CLICommand = namedtuple("CLICommand", ["command", "text", "status"])
+
+
+def force_continue():
+    km.autoclass("net/sourceforge/kolmafia/KoLmafia").forceContinue()
 
 
 def launch_gui():
@@ -31,21 +33,18 @@ def abort(message=None):
 
 def log(message="", html=False):
     message = str(message)
-    if html is False:
+    if not html:
         message = escape(message)
 
     km.RequestLogger.printLine(message)
 
 
 def execute(command):
-    ostream = ByteArrayOutputStream()
-    ostream = km.cast("java.io.OutputStream", ostream)
+    ostream = km.cast("java.io.OutputStream", ByteArrayOutputStream())
     out = PrintStream(ostream)
     km.RequestLogger.openCustom(out)
     km.KoLmafiaCLI.DEFAULT_SHELL.executeLine(command)
-    return CLICommand(
-        command, ostream.toString(), km.NamespaceInterpreter.getContinueValue()
-    )
+    return ostream.toString()
 
 
 def get_property(name, t=str):
@@ -68,10 +67,6 @@ def set_property(name, value=""):
     return km.Preferences.setString(name, str(value))
 
 
-def force_continue():
-    km.autoclass("net/sourceforge/kolmafia/KoLmafia").forceContinue()
-
-
 def have(thing, quantity=1):
     if isinstance(thing, Effect):
         return ash.have_effect(thing) >= quantity
@@ -83,7 +78,7 @@ def have(thing, quantity=1):
         return ash.have_servant(thing)
     if isinstance(thing, Skill):
         return ash.have_skill(thing)
-    raise TypeError(f"unsupported type {type(thing).__name__!r}")
+    raise TypeError(f"unexpected type {type(thing).__name__!r}")
 
 
 def in_choice(choice):
@@ -111,3 +106,34 @@ def can_kmail():
         or ash.choice_follows_fight()  # Was in a fight, gonna be in a choice
         or ash.in_multi_fight()  # Was in a fight, gonna be in another fight
     )
+
+
+def try_use(item):
+    if have(item):
+        ash.use(1, item)
+
+
+HOLIDAY_WANDERERS = {
+    "El Dia De Los Muertos Borrachos": [
+        Monster("Novia Cadáver"),
+        Monster("Novio Cadáver"),
+        Monster("Padre Cadáver"),
+        Monster("Persona Inocente Cadáver"),
+    ],
+    "Feast of Boris": [
+        Monster("Candied Yam Golem"),
+        Monster("Malevolent Tofurkey"),
+        Monster("Possessed Can of Cranberry Sauce"),
+        Monster("Stuffing Golem"),
+    ],
+    "Talk Like a Pirate Day": [
+        Monster("ambulatory pirate"),
+        Monster("migratory pirate"),
+        Monster("peripatetic pirate"),
+    ],
+}
+
+
+def get_todays_holiday_wanderers():
+    today = ash.holiday().split("/")
+    return [mon for holiday in today for mon in HOLIDAY_WANDERERS[holiday]]

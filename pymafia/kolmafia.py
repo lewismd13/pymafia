@@ -16,40 +16,40 @@ class MafiaError(Exception):
     pass
 
 
+def unproxy(obj):
+    if isinstance(obj, wrapt.ObjectProxy):
+        return object.__getattribute__(obj, "__wrapped__")
+    return obj
+
+@wrapt.decorator
+def propagate(wrapped, instance, args, kwargs):  # pylint: disable=W0613
+    result = wrapped(*args, **kwargs)
+
+    if not autoclass("net/sourceforge/kolmafia/KoLmafia").permitsContinue():
+        raise MafiaError(autoclass("net/sourceforge/kolmafia/KoLmafia").getLastMessage())
+
+    if type(result).__module__.split(".")[0] == "jnius":
+        return JniusCallableProxy(result) if callable(result) else JniusProxy(result)
+
+    return result
+
 class JniusProxy(wrapt.ObjectProxy):  # pylint: disable=W0223
     """Wrapper for jnius objects that monitors KoLmafia for errors."""
-
+    @propagate
     def __getattribute__(self, name):
-        attr = super().__getattribute__(name)
+        return super().__getattribute__(name)
 
-        if not object.__getattribute__(self, "permits_continue"):
-            raise MafiaError(object.__getattribute__(self, "last_message"))
 
-        if type(attr).__module__.startswith("jnius"):
-            return type(self)(attr)
-        return attr
-
+class JniusCallableProxy(JniusProxy):  # pylint: disable=W0223
+    @propagate
     def __call__(self, *args, **kwargs):
-        result = object.__getattribute__(self, "__wrapped__")(*args, **kwargs)
+        args = [unproxy(x) for x in args]
+        kwargs = {k: unproxy(v) for k, v in kwargs.items()}
+        return object.__getattribute__(self, "__wrapped__")(*args, **kwargs)
 
-        if not object.__getattribute__(self, "permits_continue"):
-            raise MafiaError(object.__getattribute__(self, "last_message"))
-
-        if type(result).__module__.startswith("jnius"):
-            return type(self)(result)
-        return result
-
-    @property
-    def permits_continue(self):
-        return autoclass("net/sourceforge/kolmafia/KoLmafia").permitsContinue()
-
-    @property
-    def last_message(self):
-        return autoclass("net/sourceforge/kolmafia/KoLmafia").getLastMessage()
-
-
+@propagate
 def __getattr__(key):
-    return JniusProxy(autoclass(classes[key]) if key in classes else autoclass(key))
+    return autoclass(classes[key]) if key in classes else autoclass(key)
 
 
 def download(location):

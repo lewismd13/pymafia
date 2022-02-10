@@ -1,4 +1,4 @@
-from pymafia.kolmafia import km
+import pymafia.kolmafia as km
 from pymafia.types import Familiar, Location
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
