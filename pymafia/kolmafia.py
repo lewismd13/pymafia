@@ -17,37 +17,51 @@ class MafiaError(Exception):
 
 
 def unproxy(obj):
+    """Extract the wrapped object from an proxy."""
     if isinstance(obj, wrapt.ObjectProxy):
         return object.__getattribute__(obj, "__wrapped__")
     return obj
 
+
 @wrapt.decorator
-def propagate(wrapped, instance, args, kwargs):  # pylint: disable=W0613
+def monitor(wrapped, instance, args, kwargs):  # pylint: disable=W0613
+    """Execute a callable and check mafia for errors.
+    Wrap the callable result with a proxy if it is a jnius object
+    """
     result = wrapped(*args, **kwargs)
 
     if not autoclass("net/sourceforge/kolmafia/KoLmafia").permitsContinue():
-        raise MafiaError(autoclass("net/sourceforge/kolmafia/KoLmafia").getLastMessage())
+        raise MafiaError(
+            autoclass("net/sourceforge/kolmafia/KoLmafia").getLastMessage()
+        )
 
     if type(result).__module__.split(".")[0] == "jnius":
         return JniusCallableProxy(result) if callable(result) else JniusProxy(result)
 
     return result
 
+
 class JniusProxy(wrapt.ObjectProxy):  # pylint: disable=W0223
-    """Wrapper for jnius objects that monitors KoLmafia for errors."""
-    @propagate
+    """Proxy a non-callable jnius objects and monitor mafia for errors.
+    Specifying a __call__ method for non-callable jnius objects results in a jnius conversion error.
+    """
+
+    @monitor
     def __getattribute__(self, name):
         return super().__getattribute__(name)
 
 
 class JniusCallableProxy(JniusProxy):  # pylint: disable=W0223
-    @propagate
+    """Proxy a callable jnius objects and monitor mafia for errors."""
+
+    @monitor
     def __call__(self, *args, **kwargs):
-        args = [unproxy(x) for x in args]
+        args = [unproxy(item) for item in args]
         kwargs = {k: unproxy(v) for k, v in kwargs.items()}
         return object.__getattribute__(self, "__wrapped__")(*args, **kwargs)
 
-@propagate
+
+@monitor
 def __getattr__(key):
     return autoclass(classes[key]) if key in classes else autoclass(key)
 
