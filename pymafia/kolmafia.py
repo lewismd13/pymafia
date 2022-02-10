@@ -17,7 +17,7 @@ class MafiaError(Exception):
 
 
 def unproxy(obj):
-    """Extract the wrapped object from an proxy."""
+    """Extract the wrapped object from a proxy."""
     if isinstance(obj, wrapt.ObjectProxy):
         return object.__getattribute__(obj, "__wrapped__")
     return obj
@@ -26,7 +26,7 @@ def unproxy(obj):
 @wrapt.decorator
 def monitor(wrapped, instance, args, kwargs):  # pylint: disable=W0613
     """Execute a callable and check mafia for errors.
-    Wrap the callable result with a proxy if it is a jnius object
+    Wrap the result with a proxy if it is a jnius object
     """
     result = wrapped(*args, **kwargs)
 
@@ -42,7 +42,7 @@ def monitor(wrapped, instance, args, kwargs):  # pylint: disable=W0613
 
 
 class JniusProxy(wrapt.ObjectProxy):  # pylint: disable=W0223
-    """Proxy a non-callable jnius objects and monitor mafia for errors.
+    """Proxy a non-callable jnius object and monitor mafia for errors.
     Specifying a __call__ method for non-callable jnius objects results in a jnius conversion error.
     """
 
@@ -52,7 +52,7 @@ class JniusProxy(wrapt.ObjectProxy):  # pylint: disable=W0223
 
 
 class JniusCallableProxy(JniusProxy):  # pylint: disable=W0223
-    """Proxy a callable jnius objects and monitor mafia for errors."""
+    """Proxy a callable jnius object and monitor mafia for errors."""
 
     @monitor
     def __call__(self, *args, **kwargs):
@@ -76,7 +76,7 @@ def download(location):
 if not os.path.isfile(JAR_LOCATION):
     download(JAR_LOCATION)
 jnius_config.set_classpath(JAR_LOCATION)
-from jnius import autoclass, cast  # pylint: disable=C,E,W
+from jnius import autoclass, cast  # pylint: disable=C0413,E0611,W0611
 
 classes = {}
 with zipfile.ZipFile(JAR_LOCATION) as archive:
