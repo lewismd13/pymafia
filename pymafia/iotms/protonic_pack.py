@@ -1,14 +1,13 @@
+from pymafia import ash
 from pymafia.types import Item, Location
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
-
-from pymafia import ash
 
 item = Item("protonic accelerator pack")
 
 
 def have():
-    """Return true if the player has the protonic accelerator pack available."""
+    """Return True if the player has the protonic accelerator pack available, False otherwise."""
     return _have(item)
 
 
@@ -18,7 +17,7 @@ def ghost_location():
 
 
 def streams_crossed():
-    """Return true if the player has crossed streams today."""
+    """Return True if the player has crossed streams today, False otherwise."""
     return get_property("_streamsCrossed", bool)
 
 

@@ -1,4 +1,4 @@
-from pymafia.iotms import (
+from . import (
     barrel_god,
     boxing_daycare,
     cartography,

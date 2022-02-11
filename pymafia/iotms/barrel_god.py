@@ -1,12 +1,11 @@
 import re
 
-from pymafia.utils import get_property
-
 from pymafia import ash
+from pymafia.utils import get_property
 
 
 def have():
-    """Return true if the player has the shrine to the Barrel god unlocked."""
+    """Return True if the player has the shrine to the Barrel god unlocked, False otherwise."""
     return get_property("barrelShrineUnlocked", bool)
 
 

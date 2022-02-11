@@ -1,8 +1,7 @@
+from pymafia import ash
 from pymafia.types import Element, Familiar, Item, Stat
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
-
-from pymafia import ash
 
 familiar = Familiar("Crimbo Shrub")
 decorations = Item("box of old Crimbo decorations")
@@ -21,12 +20,12 @@ gift_choices = {"yellow": 1, "meat": 2, "gifts": 3}
 
 
 def have():
-    """Return true if the player has the Crimbo Shrub in their terrarium."""
+    """Return True is the player has the Crimbo Shrub in their terrarium, False otherwise."""
     return _have(familiar)
 
 
 def is_decorated():
-    """Return true if the Crimbo Shrub has been decorated today."""
+    """Return True if the Crimbo Shrub has been decorated today, False otherwise."""
     return get_property("_shrubDecorated", bool)
 
 

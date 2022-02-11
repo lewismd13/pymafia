@@ -1,22 +1,21 @@
+from pymafia import ash
 from pymafia.combat import Macro
 from pymafia.types import Skill
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
 from pymafia.utils import in_choice, in_combat
 
-from pymafia import ash
-
 passive = Skill("Comprehensive Cartography")
 skill = Skill("Map the Monsters")
 
 
 def have():
-    """Return true if the player has the Comprehensive Cartography skill."""
+    """Return True if the player has the Comprehensive Cartography skill, False otherwise."""
     return _have(passive)
 
 
 def monsters_mapped():
-    """Map the Monsters skill uses today."""
+    """Return the number of Map the Monsters skill uses today."""
     return get_property("_monstersMapped", int)
 
 

@@ -1,8 +1,7 @@
+from pymafia import ash
 from pymafia.types import Item
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
-
-from pymafia import ash
 
 item = Item("mumming trunk")
 
@@ -18,12 +17,12 @@ costume_choices = {
 
 
 def have():
-    """Return true if the player has the mumming trunk available."""
+    """Return True if the player has the mumming trunk available, False otherwise."""
     return _have(item)
 
 
 def costumes_used():
-    """Costumes applied today."""
+    """Return a list of the costumes applied today."""
     uses = [int(x) for x in get_property("_mummeryUses").split(",") if x]
     return [name for name, choice in costume_choices.items() if choice in uses]
 

@@ -1,8 +1,7 @@
+from pymafia import ash
 from pymafia.combat import Macro
 from pymafia.types import Item, Monster
 from pymafia.utils import get_property, in_choice, in_combat
-
-from pymafia import ash
 
 item = Item("Witchess Set")
 
@@ -19,17 +18,17 @@ pieces = [
 
 
 def have():
-    """Return true if the player has the Witchess Set in their campground."""
+    """Return True if the player has the Witchess Set in their campground, False otherwise."""
     return item in ash.get_campground()
 
 
 def fights_today():
-    """Witchess fights used today."""
+    """Return the number of Witchess fights used today."""
     return get_property("_witchessFights", int)
 
 
 def fights_left():
-    """Witchess fights left today."""
+    """Return the number of Witchess fights left today."""
     return 5 - fights_today()
 
 

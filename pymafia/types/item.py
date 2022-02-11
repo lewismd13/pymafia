@@ -1,7 +1,6 @@
 from enum import Enum
 
 import pymafia.kolmafia as km
-
 from pymafia import ash, types
 
 

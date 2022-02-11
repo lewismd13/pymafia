@@ -1,8 +1,7 @@
+from pymafia import ash
 from pymafia.combat import Macro
 from pymafia.types import Effect, Item, Location
 from pymafia.utils import get_property, set_property
-
-from pymafia import ash
 
 equipment_choices = {
     Item("LOV Eardigan"): 1,
@@ -26,12 +25,12 @@ item_choices = {
 
 
 def have():
-    """Return true if the player has The Tunnel of L.O.V.E available."""
+    """Return True if the player has The Tunnel of L.O.V.E available, False otherwise."""
     return get_property("loveTunnelAvailable", bool)
 
 
 def is_used():
-    """Return true if The Tunnel of L.O.V.E has been used today."""
+    """Return True if The Tunnel of L.O.V.E has been used today, False otherwise."""
     return get_property("_loveTunnelUsed", bool)
 
 

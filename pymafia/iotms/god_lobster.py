@@ -1,9 +1,8 @@
+from pymafia import ash
 from pymafia.combat import Macro
 from pymafia.types import Familiar, Item
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
-
-from pymafia import ash
 
 familiar = Familiar("God Lobster")
 
@@ -18,17 +17,17 @@ regalia = [
 
 
 def have():
-    """Return true if the player has the God Lobster in their terrarium."""
+    """Return True if the player has the God Lobster in their terrarium, False otherwise."""
     return _have(familiar)
 
 
 def fights_today():
-    """God Lobster fights used today."""
+    """Return the number of God Lobster fights used today."""
     return get_property("godLobsterFights", int)
 
 
 def fights_left():
-    """God Lobster fights remaining today."""
+    """Return the number of God Lobster fights remaining today."""
     return 3 - fights_today()
 
 

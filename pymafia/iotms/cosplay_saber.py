@@ -1,15 +1,14 @@
+from pymafia import ash
 from pymafia.types import Item
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
-
-from pymafia import ash
 
 item = Item("Fourth of May Cosplay Saber")
 upgrade_choices = {"mp": 1, "ml": 2, "resistance": 3, "familiar": 4}
 
 
 def have():
-    """Return true if the player has the Fourth of May Cosplay Saber available."""
+    """Return True if the player has the Fourth of May Cosplay Saber available, False otherwise."""
     return _have(item)
 
 
@@ -23,7 +22,7 @@ def current_upgrade():
 
 
 def is_upgraded():
-    """Return true if the Fourth of May Cosplay Saber has been upgraded today."""
+    """Return True if the Fourth of May Cosplay Saber has been upgraded today, False otherwise."""
     return current_upgrade() is not None
 
 

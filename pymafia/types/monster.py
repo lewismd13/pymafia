@@ -1,5 +1,4 @@
 import pymafia.kolmafia as km
-
 from pymafia import ash, types
 
 Integer = km.autoclass("java.lang.Integer")

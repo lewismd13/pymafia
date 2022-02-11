@@ -1,8 +1,7 @@
+from pymafia import ash
 from pymafia.types import Item
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
-
-from pymafia import ash
 
 item = Item("SongBoom™ BoomBox")
 
@@ -18,21 +17,22 @@ song_keywords = {
 
 
 def have():
+    """Return True if the player has the SongBoom™ BoomBox available, False otherwise."""
     return _have(item)
 
 
 def song():
-    """Current song."""
+    """Return the current SongBoom™ Boombox song."""
     return get_property("boomBoxSong") or None
 
 
 def song_changes_left():
-    """Song changes left today."""
+    """Return the number of SongBoom™ Boombox song changes left today."""
     return get_property("_boomBoxSongsLeft", int)
 
 
 def set_song(new_song):
-    """Change the song."""
+    """Change the SongBoom™ Boombox song."""
     if not have():
         raise RuntimeError("need a SongBoom™ BoomBox")
     if song() == new_song:
@@ -44,5 +44,5 @@ def set_song(new_song):
 
 
 def drop_progress():
-    """Progress to next song drop (e.g. gathered meat-clip)."""
+    """Return the progress to next SongBoom™ Boombox drop (e.g. gathered meat-clip)."""
     return get_property("_boomBoxFights", int)

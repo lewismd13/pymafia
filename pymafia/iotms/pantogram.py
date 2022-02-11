@@ -1,7 +1,6 @@
+from pymafia import ash
 from pymafia.types import Element, Item, Stat
 from pymafia.utils import have as _have
-
-from pymafia import ash
 
 item = Item("portable pantogram")
 pants = Item("pantogram pants")
@@ -55,12 +54,12 @@ middle_sacrifices = {
 
 
 def have():
-    """Return true if the player has the portable pantogram available."""
+    """Return True if the player has the portable pantogram available, False otherwise."""
     return _have(item)
 
 
 def have_pants():
-    """Return true if the player has the pantogram pants available today."""
+    """Return True if the player has the pantogram pants available today, False otherwise."""
     return _have(pants)
 
 

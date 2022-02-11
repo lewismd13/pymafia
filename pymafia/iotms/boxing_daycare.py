@@ -1,10 +1,9 @@
-from pymafia.utils import get_property
-
 from pymafia import ash
+from pymafia.utils import get_property
 
 
 def have():
-    """Return true if the player has the Boxing Daycare open."""
+    """Return True if the player has the Boxing Daycare open, False otherwise."""
     return get_property("daycareOpen", bool)
 
 

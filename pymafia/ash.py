@@ -1,7 +1,6 @@
 import collections
 
 import pymafia.kolmafia as km
-
 from pymafia import types
 
 SIMPLE_TYPES = {

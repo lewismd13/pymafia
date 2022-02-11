@@ -2,9 +2,8 @@ import re
 from html import escape
 
 import pymafia.kolmafia as km
-from pymafia.types import Effect, Familiar, Item, Monster, Servant, Skill
-
 from pymafia import ash
+from pymafia.types import Effect, Familiar, Item, Monster, Servant, Skill
 
 ByteArrayOutputStream = km.autoclass("java.io.ByteArrayOutputStream")
 PrintStream = km.autoclass("java.io.PrintStream")

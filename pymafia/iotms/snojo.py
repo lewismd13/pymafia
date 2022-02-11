@@ -1,7 +1,6 @@
+from pymafia import ash
 from pymafia.types import Location
 from pymafia.utils import get_property
-
-from pymafia import ash
 
 location = Location("The X-32-F Combat Training Snowman")
 
@@ -14,7 +13,7 @@ setting_choices = {
 
 
 def have():
-    """Return true if the player has The Snojo available"""
+    """Return True if the player has The Snojo available, False otherwise"""
     return get_property("snojoAvailable", bool)
 
 
