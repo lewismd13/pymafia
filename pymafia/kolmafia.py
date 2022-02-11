@@ -43,11 +43,11 @@ class MafiaError(Exception):
 
 def tracer(frame, event, arg):
     """Monitor return events for a mafia error.
-    
+
     See https://stackoverflow.com/questions/59088671/hooking-every-function-call-in-python.
     """
     if event == "call":
-        # disable per-line events on the new frame for performance reasons
+        # disable per-line events on the frame to improve performance
         frame.f_trace_lines = False
         return tracer
 
