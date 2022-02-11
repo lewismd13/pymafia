@@ -20,7 +20,7 @@ class Monster:
         )
 
         if monster is None:
-            raise NameError(f"{type(self).__name__} {key!r} not found")
+            raise ValueError(f"{type(self).__name__} {key!r} not found")
 
         self.id = monster.getId()
         self.name = monster.getName()

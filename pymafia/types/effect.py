@@ -23,7 +23,7 @@ class Effect:
         name = km.EffectDatabase.getEffectName(id_)
 
         if name is None:
-            raise NameError(f"{type(self).__name__} {key!r} not found")
+            raise ValueError(f"{type(self).__name__} {key!r} not found")
 
         self.id = id_
         self.name = name
@@ -54,7 +54,7 @@ class Effect:
 
     @property
     def default(self):
-        return km.EffectDatabase.getDefaultAction(self.id)
+        return km.EffectDatabase.getDefaultAction(self.id) or ""
 
     @property
     def quality(self):
@@ -64,20 +64,21 @@ class Effect:
     def attributes(self):
         return list(km.EffectDatabase.getEffectAttributes(self.id)) if self else []
 
-    def all_(self):
-        pass
+    @property
+    def actions(self):
+        return list(km.EffectDatabase.getAllActions(self.id))
 
     @property
     def note(self):
-        return km.EffectDatabase.getActionNote(self.id)
+        return km.EffectDatabase.getActionNote(self.id) or ""
 
     @property
     def image(self):
-        return km.EffectDatabase.getImageName(self.id) or None
+        return km.EffectDatabase.getImageName(self.id)
 
     @property
     def descid(self):
-        return km.EffectDatabase.getDescriptionId(self.id)
+        return km.EffectDatabase.getDescriptionId(self.id) or ""
 
     @property
     def candy_tier(self):

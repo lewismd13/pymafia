@@ -14,7 +14,7 @@ class Skill:
         name = km.SkillDatabase.getSkillName(id_)
 
         if name is None:
-            raise NameError(f"{type(self).__name__} {key!r} not found")
+            raise ValueError(f"{type(self).__name__} {key!r} not found")
 
         self.id = id_
         self.name = name

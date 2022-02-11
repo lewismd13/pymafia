@@ -24,7 +24,7 @@ class Vykea:
         companion = km.VYKEACompanionData.fromString(key)
 
         if companion is None:
-            raise NameError(f"{type(self).__name__} {key!r} not found")
+            raise ValueError(f"{type(self).__name__} {key!r} not found")
 
         self.companion = companion
 

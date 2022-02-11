@@ -20,7 +20,7 @@ class Location:
         )
 
         if adventure is None:
-            raise NameError(f"{type(self).__name__} {key!r} not found")
+            raise ValueError(f"{type(self).__name__} {key!r} not found")
 
         self.id = adventure.getSnarfblat()
         self.name = adventure.getAdventureName()

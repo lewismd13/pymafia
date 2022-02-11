@@ -14,7 +14,7 @@ class Familiar:
         name = km.FamiliarDatabase.getFamiliarName(id_)
 
         if name is None:
-            raise NameError(f"{type(self).__name__} {key!r} not found")
+            raise ValueError(f"{type(self).__name__} {key!r} not found")
 
         self.id = id_
         self.name = name
@@ -43,18 +43,9 @@ class Familiar:
         return sorted(ash.to_python(values), key=lambda x: x.id)
 
     @property
-    def familiar(self):
-        return km.KoLCharacter.findFamiliar(self.id)
-
-    @property
-    def poke_data(self):
-        return km.FamiliarDatabase.getPokeDataById(self.id)
-
-    @property
     def hatchling(self):
-        return (
-            types.Item(km.FamiliarDatabase.getFamiliarLarva(self.id)) if self else None
-        )
+        hatchling_id = km.FamiliarDatabase.getFamiliarLarva(self.id)
+        return types.Item(hatchling_id) or None
 
     @property
     def image(self):
@@ -62,15 +53,18 @@ class Familiar:
 
     @property
     def nickname(self):
-        return None if self.familiar is None else self.familiar.getName()
+        fam = km.KoLCharacter.findFamiliar(self.id)
+        return fam.getName()
 
     @property
     def experience(self):
-        return 0 if self.familiar is None else self.familiar.getTotalExperience()
+        fam = km.KoLCharacter.findFamiliar(self.id)
+        return fam.getTotalExperience()
 
     @property
     def charges(self):
-        return 0 if self.familiar is None else self.familiar.getCharges()
+        fam = km.KoLCharacter.findFamiliar(self.id)
+        return fam.getCharges()
 
     @property
     def drop_name(self):
@@ -160,44 +154,55 @@ class Familiar:
 
     @property
     def poke_level(self):
-        return 0 if self.familiar is None else self.familiar.getPokeLevel()
+        fam = km.KoLCharacter.findFamiliar(self.id)
+        return 0 if fam is None else fam.getPokeLevel()
 
     @property
     def poke_level_2_power(self):
-        return 0 if self.poke_data is None else self.poke_data.getPower2()
+        data = km.FamiliarDatabase.getPokeDataById(self.id)
+        return 0 if data is None else data.getPower2()
 
     @property
     def poke_level_2_hp(self):
-        return 0 if self.poke_data is None else self.poke_data.getHP2()
+        data = km.FamiliarDatabase.getPokeDataById(self.id)
+        return 0 if data is None else data.getHP2()
 
     @property
     def poke_level_3_power(self):
-        return 0 if self.poke_data is None else self.poke_data.getPower3()
+        data = km.FamiliarDatabase.getPokeDataById(self.id)
+        return 0 if data is None else data.getPower3()
 
     @property
     def poke_level_3_hp(self):
-        return 0 if self.poke_data is None else self.poke_data.getHP3()
+        data = km.FamiliarDatabase.getPokeDataById(self.id)
+        return 0 if data is None else data.getHP3()
 
     @property
     def poke_level_4_power(self):
-        return 0 if self.poke_data is None else self.poke_data.getPower4()
+        data = km.FamiliarDatabase.getPokeDataById(self.id)
+        return 0 if data is None else data.getPower4()
 
     @property
     def poke_level_4_hp(self):
-        return 0 if self.poke_data is None else self.poke_data.getHP4()
+        data = km.FamiliarDatabase.getPokeDataById(self.id)
+        return 0 if data is None else data.getHP4()
 
     @property
     def poke_move_1(self):
-        return None if self.poke_data is None else self.poke_data.getMove1()
+        data = km.FamiliarDatabase.getPokeDataById(self.id)
+        return "" if data is None else data.getMove1()
 
     @property
     def poke_move_2(self):
-        return None if self.poke_data is None else self.poke_data.getMove2()
+        data = km.FamiliarDatabase.getPokeDataById(self.id)
+        return "" if data is None else data.getMove2()
 
     @property
     def poke_move_3(self):
-        return None if self.poke_data is None else self.poke_data.getMove3()
+        data = km.FamiliarDatabase.getPokeDataById(self.id)
+        return "" if data is None else data.getMove3()
 
     @property
     def poke_attribute(self):
-        return None if self.poke_data is None else self.poke_data.getAttribute()
+        data = km.FamiliarDatabase.getPokeDataById(self.id)
+        return "" if data is None else data.getAttribute()

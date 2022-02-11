@@ -1,5 +1,7 @@
 from enum import Enum
 
+import pymafia.kolmafia as km
+
 
 class Phylum(Enum):
     NONE = "none"
@@ -41,3 +43,10 @@ class Phylum(Enum):
     @classmethod
     def all(cls):
         return list(cls)
+
+    @property
+    def image(self):
+        phylum = km.autoclass("net/sourceforge/kolmafia/persistence/MonsterDatabase$Phylum").find(self.value)
+        if type(self)(phylum.toString()) is self.NONE:
+            return ""
+        return phylum.getImage()

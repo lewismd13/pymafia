@@ -13,7 +13,7 @@ class Coinmaster:
         coinmaster = km.CoinmasterRegistry.findCoinmaster(key)
 
         if coinmaster is None:
-            raise NameError(f"{type(self).__name__} {key!r} not found")
+            raise ValueError(f"{type(self).__name__} {key!r} not found")
 
         self.name = coinmaster.getMaster()
         self.coinmaster = coinmaster

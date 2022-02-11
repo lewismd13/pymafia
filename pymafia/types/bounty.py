@@ -25,7 +25,7 @@ class Bounty:
         bounties = km.BountyDatabase.getMatchingNames(key)
 
         if len(bounties) != 1:
-            raise NameError(f"{type(self).__name__} {key!r} not found")
+            raise ValueError(f"{type(self).__name__} {key!r} not found")
 
         canonical = bounties[0]
         self.name = km.BountyDatabase.canonicalToName(canonical)
@@ -56,7 +56,7 @@ class Bounty:
 
     @property
     def type_(self):
-        return MafiaBountyType(km.BountyDatabase.getType(self.name))
+        return MafiaBountyType(km.BountyDatabase.getType(self.name)) if self else None
 
     @property
     def kol_internal_type(self):
@@ -72,7 +72,7 @@ class Bounty:
 
     @property
     def image(self):
-        return km.BountyDatabase.getImage(self.name)
+        return km.BountyDatabase.getImage(self.name) or ""
 
     @property
     def monster(self):

@@ -32,7 +32,7 @@ class Item:
         name = km.ItemDatabase.getItemDataName(id_)
 
         if name is None:
-            raise NameError(f"{type(self).__name__} {key!r} not found")
+            raise ValueError(f"{type(self).__name__} {key!r} not found")
 
         self.id = id_
         self.name = name
