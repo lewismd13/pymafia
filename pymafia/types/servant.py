@@ -3,9 +3,12 @@ from pymafia import ash
 
 
 class Servant:
+    id = 0
+    name = "none"
+    data = None
+
     def __init__(self, key):
-        if key in (None, 0, "none"):
-            self.data = None
+        if key in (None, self.id, self.name):
             return
 
         data = (
@@ -17,6 +20,8 @@ class Servant:
         if data is None:
             raise NameError(f"{type(self).__name__} {key!r} not found")
 
+        self.id = data[2]
+        self.name = data[0]
         self.data = data
 
     def __str__(self):
@@ -35,7 +40,7 @@ class Servant:
         )
 
     def __bool__(self):
-        return self.data is not None
+        return (self.id, self.name) != (type(self).id, type(self).name)
 
     @classmethod
     def all(cls):
@@ -43,22 +48,16 @@ class Servant:
         return sorted(ash.to_python(values), key=lambda x: x.id)
 
     @property
-    def id(self):
-        return self.data[2] if self else 0
-
-    @property
-    def name(self):
-        return self.data[0] if self else "none"
+    def servant(self):
+        return km.EdServantData.findEdServant(self.name)
 
     @property
     def level(self):
-        servant = km.EdServantData.findEdServant(self.name)
-        return 0 if servant is None else servant.getLevel()
+        return 0 if self.servant is None else self.servant.getLevel()
 
     @property
     def experience(self):
-        servant = km.EdServantData.findEdServant(self.name)
-        return 0 if servant is None else servant.getExperience()
+        return 0 if self.servant is None else self.servant.getExperience()
 
     @property
     def image(self):

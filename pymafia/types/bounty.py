@@ -43,7 +43,7 @@ class Bounty:
         return isinstance(other, type(self)) and self.name == other.name
 
     def __bool__(self):
-        return self != type(self)()
+        return self.name != type(self).name
 
     @classmethod
     def all(cls):

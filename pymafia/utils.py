@@ -2,8 +2,27 @@ import re
 from html import escape
 
 import pymafia.kolmafia as km
-from pymafia import ash
-from pymafia.types import Effect, Familiar, Item, Monster, Servant, Skill
+from pymafia import ash, types
+
+HOLIDAY_WANDERERS = {
+    "El Dia De Los Muertos Borrachos": [
+        types.Monster("Novia Cadáver"),
+        types.Monster("Novio Cadáver"),
+        types.Monster("Padre Cadáver"),
+        types.Monster("Persona Inocente Cadáver"),
+    ],
+    "Feast of Boris": [
+        types.Monster("Candied Yam Golem"),
+        types.Monster("Malevolent Tofurkey"),
+        types.Monster("Possessed Can of Cranberry Sauce"),
+        types.Monster("Stuffing Golem"),
+    ],
+    "Talk Like a Pirate Day": [
+        types.Monster("ambulatory pirate"),
+        types.Monster("migratory pirate"),
+        types.Monster("peripatetic pirate"),
+    ],
+}
 
 ByteArrayOutputStream = km.autoclass("java.io.ByteArrayOutputStream")
 PrintStream = km.autoclass("java.io.PrintStream")
@@ -67,15 +86,15 @@ def set_property(name, value=""):
 
 
 def have(thing, quantity=1):
-    if isinstance(thing, Effect):
+    if isinstance(thing, types.Effect):
         return ash.have_effect(thing) >= quantity
-    if isinstance(thing, Familiar):
+    if isinstance(thing, types.Familiar):
         return ash.have_familiar(thing)
-    if isinstance(thing, Item):
+    if isinstance(thing, types.Item):
         return ash.available_amount(thing) >= quantity
-    if isinstance(thing, Servant):
+    if isinstance(thing, types.Servant):
         return ash.have_servant(thing)
-    if isinstance(thing, Skill):
+    if isinstance(thing, types.Skill):
         return ash.have_skill(thing)
     raise TypeError(f"unexpected type {type(thing).__name__!r}")
 
@@ -110,27 +129,6 @@ def can_kmail():
 def try_use(item):
     if have(item):
         ash.use(1, item)
-
-
-HOLIDAY_WANDERERS = {
-    "El Dia De Los Muertos Borrachos": [
-        Monster("Novia Cadáver"),
-        Monster("Novio Cadáver"),
-        Monster("Padre Cadáver"),
-        Monster("Persona Inocente Cadáver"),
-    ],
-    "Feast of Boris": [
-        Monster("Candied Yam Golem"),
-        Monster("Malevolent Tofurkey"),
-        Monster("Possessed Can of Cranberry Sauce"),
-        Monster("Stuffing Golem"),
-    ],
-    "Talk Like a Pirate Day": [
-        Monster("ambulatory pirate"),
-        Monster("migratory pirate"),
-        Monster("peripatetic pirate"),
-    ],
-}
 
 
 def get_todays_holiday_wanderers():

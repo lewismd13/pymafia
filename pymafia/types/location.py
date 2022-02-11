@@ -42,7 +42,7 @@ class Location:
         )
 
     def __bool__(self):
-        return self != type(self)()
+        return (self.id, self.name) != (type(self).id, type(self).name)
 
     @classmethod
     def all(cls):

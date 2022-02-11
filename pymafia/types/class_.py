@@ -36,7 +36,7 @@ class Class:
         )
 
     def __bool__(self):
-        return self != type(self)()
+        return (self.id, self.name) != (type(self).id, type(self).name)
 
     @classmethod
     def all(cls):
@@ -47,6 +47,7 @@ class Class:
     def primestat(self):
         if not self:
             return types.Stat.NONE
+
         prime_index = self.ascension_class.getPrimeStatIndex()
         stat_name = km.AdventureResult.STAT_NAMES[prime_index]
         return types.Stat[stat_name.upper()]
