@@ -1,8 +1,9 @@
 import json
 import os
 import re
+import sys
+import urllib
 import zipfile
-from urllib import request
 
 import jnius_config
 
@@ -11,19 +12,11 @@ JENKINS_JOB_URL = "https://ci.kolmafia.us/job/Kolmafia/lastSuccessfulBuild/"
 JAVA_PATTERN = "(net\\/sourceforge\\/kolmafia.*\\/([^\\$]*))\\.class"
 
 
-class MafiaError(Exception):
-    pass
-
-
-def __getattr__(key):
-    return autoclass(classes[key]) if key in classes else autoclass(key)
-
-
 def download(location):
-    with request.urlopen(JENKINS_JOB_URL + "/api/json") as response:
+    with urllib.request.urlopen(JENKINS_JOB_URL + "/api/json") as response:
         data = json.loads(response.read().decode())
         jar_url = JENKINS_JOB_URL + "artifact/" + data["artifacts"][0]["relativePath"]
-        request.urlretrieve(jar_url, filename=location)
+        urllib.request.urlretrieve(jar_url, filename=location)
 
 
 if not os.path.isfile(JAR_LOCATION):
@@ -38,3 +31,31 @@ with zipfile.ZipFile(JAR_LOCATION) as archive:
         match = re.search(JAVA_PATTERN, filename)
         if match:
             classes[match.group(2)] = match.group(1)
+
+
+def __getattr__(key):
+    return autoclass(classes[key]) if key in classes else autoclass(key)
+
+
+class MafiaError(Exception):
+    pass
+
+
+def tracer(frame, event, arg):
+    """Monitor return events for a mafia error.
+    
+    See https://stackoverflow.com/questions/59088671/hooking-every-function-call-in-python.
+    """
+    if event == "call":
+        # disable per-line events on the new frame for performance reasons
+        frame.f_trace_lines = False
+        return tracer
+
+    elif event == "return":
+        KoLmafia = autoclass("net/sourceforge/kolmafia/KoLmafia")
+        if not KoLmafia.permitsContinue():
+            KoLmafia.forceContinue()
+            raise MafiaError(KoLmafia.getLastMessage())
+
+
+sys.settrace(tracer)
