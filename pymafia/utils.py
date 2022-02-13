@@ -2,25 +2,26 @@ import re
 from html import escape
 
 import pymafia.kolmafia as km
-from pymafia import ash, types
+from pymafia import ash
+from pymafia.datatypes import Monster, Item, Familiar, Effect, Skill, Servant
 
 HOLIDAY_WANDERERS = {
     "El Dia De Los Muertos Borrachos": [
-        types.Monster("Novia Cadáver"),
-        types.Monster("Novio Cadáver"),
-        types.Monster("Padre Cadáver"),
-        types.Monster("Persona Inocente Cadáver"),
+        Monster("Novia Cadáver"),
+        Monster("Novio Cadáver"),
+        Monster("Padre Cadáver"),
+        Monster("Persona Inocente Cadáver"),
     ],
     "Feast of Boris": [
-        types.Monster("Candied Yam Golem"),
-        types.Monster("Malevolent Tofurkey"),
-        types.Monster("Possessed Can of Cranberry Sauce"),
-        types.Monster("Stuffing Golem"),
+        Monster("Candied Yam Golem"),
+        Monster("Malevolent Tofurkey"),
+        Monster("Possessed Can of Cranberry Sauce"),
+        Monster("Stuffing Golem"),
     ],
     "Talk Like a Pirate Day": [
-        types.Monster("ambulatory pirate"),
-        types.Monster("migratory pirate"),
-        types.Monster("peripatetic pirate"),
+        Monster("ambulatory pirate"),
+        Monster("migratory pirate"),
+        Monster("peripatetic pirate"),
     ],
 }
 
@@ -86,15 +87,15 @@ def set_property(name, value=""):
 
 
 def have(thing, quantity=1):
-    if isinstance(thing, types.Effect):
+    if isinstance(thing, Effect):
         return ash.have_effect(thing) >= quantity
-    if isinstance(thing, types.Familiar):
+    if isinstance(thing, Familiar):
         return ash.have_familiar(thing)
-    if isinstance(thing, types.Item):
+    if isinstance(thing, Item):
         return ash.available_amount(thing) >= quantity
-    if isinstance(thing, types.Servant):
+    if isinstance(thing, Servant):
         return ash.have_servant(thing)
-    if isinstance(thing, types.Skill):
+    if isinstance(thing, Skill):
         return ash.have_skill(thing)
     raise TypeError(f"unexpected type {type(thing).__name__!r}")
 
