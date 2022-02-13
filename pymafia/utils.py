@@ -3,7 +3,7 @@ from html import escape
 
 import pymafia.kolmafia as km
 from pymafia import ash
-from pymafia.datatypes import Monster, Item, Familiar, Effect, Skill, Servant
+from pymafia.datatypes import Effect, Familiar, Item, Monster, Servant, Skill
 
 HOLIDAY_WANDERERS = {
     "El Dia De Los Muertos Borrachos": [
