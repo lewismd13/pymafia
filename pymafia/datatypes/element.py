@@ -46,4 +46,4 @@ class Element(Enum):
             return "circle.gif"
         if self is self.SUPERCOLD:
             return "circle.gif"
-        return None
+        return ""

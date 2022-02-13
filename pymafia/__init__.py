@@ -1,4 +1,4 @@
-import pymafia.ash
+from pymafia import ash
 import pymafia.kolmafia as km
 from pymafia.combat import Macro
 from pymafia.datatypes import *

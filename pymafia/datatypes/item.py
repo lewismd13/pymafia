@@ -1,8 +1,7 @@
 from enum import Enum
 
 import pymafia.kolmafia as km
-from pymafia import ash
-from pymafia.datatypes import Coinmaster, Skill
+from pymafia import ash, datatypes
 
 
 class ItemQuality(Enum):
@@ -88,7 +87,7 @@ class Item:
     @property
     def levelreq(self):
         """Return the level requirement for consuming or equipping the Item."""
-        return km.ConsumablesDatabase.getLevelReqByName(self.name)
+        return km.ConsumablesDatabase.getLevelReqByName(self.name) or 0
 
     @property
     def quality(self):
@@ -164,7 +163,7 @@ class Item:
         - Tags relevant to game mechanics (such as "MARTINI", "BEER" and "SAUCY")
         - "Unspaded"
         """
-        return km.ConsumablesDatabase.getNotes(self.name)
+        return km.ConsumablesDatabase.getNotes(self.name) or ""
 
     @property
     def quest(self):
@@ -263,13 +262,13 @@ class Item:
     def seller(self):
         """Return which Coinmaster sells this Item, if any."""
         data = km.CoinmasterRegistry.findSeller(self.id)
-        return None if data is None else Coinmaster(data.getMaster())
+        return None if data is None else datatypes.Coinmaster(data.getMaster())
 
     @property
     def buyer(self):
         """Return which Coinmaster buys this Item, if any."""
         data = km.CoinmasterRegistry.findBuyer(self.id)
-        return None if data is None else Coinmaster(data.getMaster())
+        return None if data is None else datatypes.Coinmaster(data.getMaster())
 
     @property
     def name_length(self):
@@ -279,9 +278,9 @@ class Item:
     @property
     def noob_skill(self):
         """Return the noob Skill granted by absorbing this Item."""
-        return Skill(km.ItemDatabase.getNoobSkillId(self.id))
+        return datatypes.Skill(km.ItemDatabase.getNoobSkillId(self.id)) or None
 
     @property
     def tcrs_name(self):
         """Return the name of the Item as it appears in your current Two Crazy Random Summer run. If you are not in a TCRS run, the regular Item name is returned."""
-        return km.TCRSDatabase.getTCRSName(self.id)
+        return km.TCRSDatabase.getTCRSName(self.id) or ""

@@ -1,6 +1,5 @@
 import pymafia.kolmafia as km
-from pymafia import ash
-from pymafia.datatypes import Class
+from pymafia import ash, datatypes
 
 
 class Skill:
@@ -62,7 +61,7 @@ class Skill:
 
     @property
     def class_(self):
-        return Class(km.SkillDatabase.getSkillCategory(self.id))
+        return datatypes.Class(km.SkillDatabase.getSkillCategory(self.id) or None)
 
     @property
     def libram(self):

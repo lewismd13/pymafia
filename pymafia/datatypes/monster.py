@@ -1,6 +1,5 @@
 import pymafia.kolmafia as km
-from pymafia import ash
-from pymafia.datatypes import Effect, Element, Phylum
+from pymafia import ash, datatypes
 
 Integer = km.autoclass("java.lang.Integer")
 
@@ -86,17 +85,17 @@ class Monster:
     @property
     def attack_element(self):
         return (
-            Element(self.monster.getAttackElement().toString())
+            datatypes.Element(self.monster.getAttackElement().toString())
             if self
-            else Element.NONE
+            else datatypes.Element.NONE
         )
 
     @property
     def defense_element(self):
         return (
-            Element(self.monster.getDefenseElement().toString())
+            datatypes.Element(self.monster.getDefenseElement().toString())
             if self
-            else Element.NONE
+            else datatypes.Element.NONE
         )
 
     @property
@@ -125,7 +124,11 @@ class Monster:
 
     @property
     def phylum(self):
-        return Phylum(self.monster.getPhylum().toString()) if self else Phylum.NONE
+        return (
+            datatypes.Phylum(self.monster.getPhylum().toString())
+            if self
+            else datatypes.Phylum.NONE
+        )
 
     @property
     def poison(self):
@@ -137,7 +140,7 @@ class Monster:
         poison_name = km.EffectDatabase.getEffectName(
             km.EffectDatabase.POISON_ID[poison_level]
         )
-        return Effect(poison_name)
+        return datatypes.Effect(poison_name)
 
     @property
     def boss(self):
@@ -149,7 +152,7 @@ class Monster:
 
     @property
     def image(self):
-        return self.monster.getImage() if self else None
+        return self.monster.getImage() if self else ""
 
     @property
     def images(self):
@@ -165,12 +168,12 @@ class Monster:
 
     @property
     def manuel_name(self):
-        return self.monster.getManuelName() if self else None
+        return self.monster.getManuelName() if self else ""
 
     @property
     def wiki_name(self):
-        return self.monster.getWikiName() if self else None
+        return self.monster.getWikiName() if self else ""
 
     @property
     def attributes(self):
-        return self.monster.getAttributes() if self else None
+        return self.monster.getAttributes() if self else ""

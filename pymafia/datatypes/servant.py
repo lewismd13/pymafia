@@ -61,20 +61,20 @@ class Servant:
 
     @property
     def image(self):
-        return self.data[3] if self else None
+        return self.data[3] if self else ""
 
     @property
     def level1_ability(self):
-        return self.data[4] if self else None
+        return self.data[4] if self else ""
 
     @property
     def level7_ability(self):
-        return self.data[5] if self else None
+        return self.data[5] if self else ""
 
     @property
     def level14_ability(self):
-        return self.data[6] if self else None
+        return self.data[6] if self else ""
 
     @property
     def level21_ability(self):
-        return self.data[7] if self else None
+        return self.data[7] if self else ""

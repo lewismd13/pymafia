@@ -1,6 +1,5 @@
 import pymafia.kolmafia as km
-from pymafia import ash
-from pymafia.datatypes import Skill
+from pymafia import ash, datatypes
 
 
 class Thrall:
@@ -58,16 +57,16 @@ class Thrall:
 
     @property
     def image(self):
-        return self.data[6] if self else None
+        return self.data[6] if self else ""
 
     @property
     def tinyimage(self):
-        return self.data[7] if self else None
+        return self.data[7] if self else ""
 
     @property
     def skill(self):
-        return Skill(self.data[3]) if self else None
+        return datatypes.Skill(self.data[3]) if self else None
 
     @property
     def current_modifiers(self):
-        return self.thrall.getCurrentModifiers() if self else None
+        return self.thrall.getCurrentModifiers() if self else ""

@@ -1,6 +1,5 @@
 import pymafia.kolmafia as km
-from pymafia import ash
-from pymafia.datatypes import Bounty
+from pymafia import ash, datatypes
 
 
 class Location:
@@ -67,26 +66,26 @@ class Location:
 
     @property
     def zone(self):
-        return self.adventure.getZone() if self else None
+        return self.adventure.getZone() if self else ""
 
     @property
     def parent(self):
-        return self.adventure.getParentZone() if self else None
+        return self.adventure.getParentZone() if self else ""
 
     @property
     def parentdesc(self):
-        return self.adventure.getParentZoneDescription() if self else None
+        return self.adventure.getParentZoneDescription() if self else ""
 
     @property
     def environment(self):
-        return self.adventure.getEnvironment() if self else None
+        return self.adventure.getEnvironment() if self else ""
 
     @property
     def bounty(self):
         if not self:
             return None
         bounty = km.AdventureDatabase.getBounty(self.adventure)
-        return None if bounty is None else Bounty(bounty.getName())
+        return None if bounty is None else datatypes.Bounty(bounty.getName())
 
     @property
     def combat_queue(self):

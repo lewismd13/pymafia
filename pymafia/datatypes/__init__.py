@@ -1,4 +1,4 @@
-from .bounty import Bounty, KoLBountyType, MafiaBountyType
+from .bounty import Bounty
 from .class_ import Class
 from .coinmaster import Coinmaster
 from .effect import Effect, EffectQuality

@@ -1,6 +1,5 @@
 import pymafia.kolmafia as km
-from pymafia import ash
-from pymafia.datatypes import Stat
+from pymafia import ash, datatypes
 
 
 class Class:
@@ -47,8 +46,7 @@ class Class:
     @property
     def primestat(self):
         if not self:
-            return Stat.NONE
-
+            return datatypes.Stat.NONE
         prime_index = self.ascension_class.getPrimeStatIndex()
         stat_name = km.AdventureResult.STAT_NAMES[prime_index]
-        return Stat[stat_name.upper()]
+        return datatypes.Stat[stat_name.upper()]

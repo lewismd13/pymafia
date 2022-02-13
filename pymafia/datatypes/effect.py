@@ -62,7 +62,8 @@ class Effect:
 
     @property
     def attributes(self):
-        return list(km.EffectDatabase.getEffectAttributes(self.id)) if self else []
+        attrs = km.EffectDatabase.getEffectAttributes(self.id)
+        return [] if attrs is None else list(attrs)
 
     @property
     def actions(self):

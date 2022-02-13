@@ -1,19 +1,5 @@
-from enum import Enum
-
 import pymafia.kolmafia as km
-from pymafia import ash
-from pymafia.datatypes import Location, Monster
-
-
-class MafiaBountyType(Enum):
-    EASY = "easy"
-    HARD = "hard"
-    SPECIAL = "special"
-
-
-class KoLBountyType(Enum):
-    LOW = "low"
-    HIGH = "high"
+from pymafia import ash, datatypes
 
 
 class Bounty:
@@ -57,14 +43,14 @@ class Bounty:
 
     @property
     def type_(self):
-        return MafiaBountyType(km.BountyDatabase.getType(self.name)) if self else None
+        return km.BountyDatabase.getType(self.name) or ""
 
     @property
     def kol_internal_type(self):
-        if self.type_ is MafiaBountyType.EASY:
-            return KoLBountyType.LOW
-        if self.type_ is MafiaBountyType.HARD:
-            return KoLBountyType.HIGH
+        if self.type_ == "easy":
+            return "low"
+        if self.type_ == "hard":
+            return "high"
         return None
 
     @property
@@ -77,8 +63,8 @@ class Bounty:
 
     @property
     def monster(self):
-        return Monster(km.BountyDatabase.getMonster(self.name)) if self else None
+        return datatypes.Monster(km.BountyDatabase.getMonster(self.name)) or None
 
     @property
     def location(self):
-        return Location(km.BountyDatabase.getLocation(self.name)) if self else None
+        return datatypes.Location(km.BountyDatabase.getLocation(self.name)) or None
