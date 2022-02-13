@@ -1,7 +1,8 @@
 from enum import IntEnum
 
 import pymafia.kolmafia as km
-from pymafia import ash, types
+from pymafia import ash
+from pymafia.datatypes import Element, Item
 
 
 class VykeaType(IntEnum):
@@ -63,7 +64,7 @@ class Vykea:
     @property
     def rune(self):
         item_id = self.companion.getRune().getItemId()
-        return None if item_id == types.Item.id else types.Item(item_id)
+        return None if item_id == Item.id else Item(item_id)
 
     @property
     def level(self):
@@ -79,4 +80,4 @@ class Vykea:
 
     @property
     def attack_element(self):
-        return types.Element(self.companion.getAttackElement().toString())
+        return Element(self.companion.getAttackElement().toString())

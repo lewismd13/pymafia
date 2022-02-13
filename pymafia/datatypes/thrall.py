@@ -1,5 +1,6 @@
 import pymafia.kolmafia as km
-from pymafia import ash, types
+from pymafia import ash
+from pymafia.datatypes import Skill
 
 
 class Thrall:
@@ -65,7 +66,7 @@ class Thrall:
 
     @property
     def skill(self):
-        return types.Skill(self.data[3]) if self else None
+        return Skill(self.data[3]) if self else None
 
     @property
     def current_modifiers(self):

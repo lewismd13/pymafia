@@ -1,6 +1,6 @@
 from pymafia import ash
 from pymafia.combat import Macro
-from pymafia.types import Item, Monster
+from pymafia.datatypes import Item, Monster
 from pymafia.utils import get_property, in_choice, in_combat
 
 item = Item("Witchess Set")

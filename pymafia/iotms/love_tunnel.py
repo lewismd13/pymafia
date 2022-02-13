@@ -1,6 +1,6 @@
 from pymafia import ash
 from pymafia.combat import Macro
-from pymafia.types import Effect, Item, Location
+from pymafia.datatypes import Effect, Item, Location
 from pymafia.utils import get_property, set_property
 
 equipment_choices = {

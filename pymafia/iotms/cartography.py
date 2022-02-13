@@ -1,6 +1,6 @@
 from pymafia import ash
 from pymafia.combat import Macro
-from pymafia.types import Skill
+from pymafia.datatypes import Skill
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
 from pymafia.utils import in_choice, in_combat

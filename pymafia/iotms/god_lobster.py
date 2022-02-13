@@ -1,6 +1,6 @@
 from pymafia import ash
 from pymafia.combat import Macro
-from pymafia.types import Familiar, Item
+from pymafia.datatypes import Familiar, Item
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
 

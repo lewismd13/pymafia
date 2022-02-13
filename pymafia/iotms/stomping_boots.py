@@ -1,5 +1,5 @@
 from pymafia import ash
-from pymafia.types import Familiar
+from pymafia.datatypes import Familiar
 from pymafia.utils import get_property
 from pymafia.utils import have as _have
 

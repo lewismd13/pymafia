@@ -1,5 +1,6 @@
 import pymafia.kolmafia as km
-from pymafia import ash, types
+from pymafia import ash
+from pymafia.datatypes import Bounty
 
 
 class Location:
@@ -85,7 +86,7 @@ class Location:
         if not self:
             return None
         bounty = km.AdventureDatabase.getBounty(self.adventure)
-        return None if bounty is None else types.Bounty(bounty.getName())
+        return None if bounty is None else Bounty(bounty.getName())
 
     @property
     def combat_queue(self):

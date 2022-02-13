@@ -1,5 +1,6 @@
 import pymafia.kolmafia as km
-from pymafia import ash, types
+from pymafia import ash
+from pymafia.datatypes import Effect, Element, Phylum
 
 Integer = km.autoclass("java.lang.Integer")
 
@@ -85,17 +86,17 @@ class Monster:
     @property
     def attack_element(self):
         return (
-            types.Element(self.monster.getAttackElement().toString())
+            Element(self.monster.getAttackElement().toString())
             if self
-            else types.Element.NONE
+            else Element.NONE
         )
 
     @property
     def defense_element(self):
         return (
-            types.Element(self.monster.getDefenseElement().toString())
+            Element(self.monster.getDefenseElement().toString())
             if self
-            else types.Element.NONE
+            else Element.NONE
         )
 
     @property
@@ -124,11 +125,7 @@ class Monster:
 
     @property
     def phylum(self):
-        return (
-            types.Phylum(self.monster.getPhylum().toString())
-            if self
-            else types.Phylum.NONE
-        )
+        return Phylum(self.monster.getPhylum().toString()) if self else Phylum.NONE
 
     @property
     def poison(self):
@@ -140,7 +137,7 @@ class Monster:
         poison_name = km.EffectDatabase.getEffectName(
             km.EffectDatabase.POISON_ID[poison_level]
         )
-        return types.Effect(poison_name)
+        return Effect(poison_name)
 
     @property
     def boss(self):

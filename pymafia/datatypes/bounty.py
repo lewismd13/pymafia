@@ -1,7 +1,8 @@
 from enum import Enum
 
 import pymafia.kolmafia as km
-from pymafia import ash, types
+from pymafia import ash
+from pymafia.datatypes import Location, Monster
 
 
 class MafiaBountyType(Enum):
@@ -76,10 +77,8 @@ class Bounty:
 
     @property
     def monster(self):
-        return types.Monster(km.BountyDatabase.getMonster(self.name)) if self else None
+        return Monster(km.BountyDatabase.getMonster(self.name)) if self else None
 
     @property
     def location(self):
-        return (
-            types.Location(km.BountyDatabase.getLocation(self.name)) if self else None
-        )
+        return Location(km.BountyDatabase.getLocation(self.name)) if self else None

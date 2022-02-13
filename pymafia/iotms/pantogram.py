@@ -1,5 +1,5 @@
 from pymafia import ash
-from pymafia.types import Element, Item, Stat
+from pymafia.datatypes import Element, Item, Stat
 from pymafia.utils import have as _have
 
 item = Item("portable pantogram")

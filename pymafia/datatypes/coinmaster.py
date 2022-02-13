@@ -1,5 +1,6 @@
 import pymafia.kolmafia as km
-from pymafia import ash, types
+from pymafia import ash
+from pymafia.datatypes import Item
 
 
 class Coinmaster:
@@ -47,7 +48,7 @@ class Coinmaster:
         if not self:
             return None
         item = self.coinmaster.getItem()
-        return None if item is None else types.Item(item.getItemId())
+        return None if item is None else Item(item.getItemId())
 
     @property
     def property_(self):

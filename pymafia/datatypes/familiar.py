@@ -1,5 +1,6 @@
 import pymafia.kolmafia as km
-from pymafia import ash, types
+from pymafia import ash
+from pymafia.datatypes import Item
 
 
 class Familiar:
@@ -45,7 +46,7 @@ class Familiar:
     @property
     def hatchling(self):
         hatchling_id = km.FamiliarDatabase.getFamiliarLarva(self.id)
-        return types.Item(hatchling_id) or None
+        return Item(hatchling_id) or None
 
     @property
     def image(self):
@@ -73,7 +74,7 @@ class Familiar:
     @property
     def drop_item(self):
         item = km.FamiliarData.dropItem(self.id)
-        return None if item is None else types.Item(item.getItemId())
+        return None if item is None else Item(item.getItemId())
 
     @property
     def drops_today(self):
