@@ -60,8 +60,7 @@ def to_java(obj):
 
     if isinstance(obj, tuple(SIMPLE_TYPES.values())):
         parse_value = getattr(km.DataTypes, f"parse{type(obj).__name__}Value")
-        return_default = False
-        return parse_value(str(obj), return_default)
+        return parse_value(str(obj), False)
 
     if isinstance(obj, collections.abc.Mapping):
         jmap = TreeMap()
