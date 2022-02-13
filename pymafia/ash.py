@@ -1,7 +1,24 @@
 import collections
 
 import pymafia.kolmafia as km
-from pymafia import types
+from pymafia.datatypes import (
+    Bounty,
+    Class,
+    Coinmaster,
+    Effect,
+    Element,
+    Familiar,
+    Item,
+    Location,
+    Monster,
+    Phylum,
+    Servant,
+    Skill,
+    Slot,
+    Stat,
+    Thrall,
+    Vykea,
+)
 
 SIMPLE_TYPES = {
     km.DataTypes.TYPE_BOOLEAN: bool,
@@ -9,22 +26,22 @@ SIMPLE_TYPES = {
     km.DataTypes.TYPE_FLOAT: float,
     km.DataTypes.TYPE_STRING: str,
     km.DataTypes.TYPE_BUFFER: str,
-    km.DataTypes.TYPE_ITEM: types.Item,
-    km.DataTypes.TYPE_LOCATION: types.Location,
-    km.DataTypes.TYPE_CLASS: types.Class,
-    km.DataTypes.TYPE_STAT: types.Stat,
-    km.DataTypes.TYPE_SKILL: types.Skill,
-    km.DataTypes.TYPE_EFFECT: types.Effect,
-    km.DataTypes.TYPE_FAMILIAR: types.Familiar,
-    km.DataTypes.TYPE_SLOT: types.Slot,
-    km.DataTypes.TYPE_MONSTER: types.Monster,
-    km.DataTypes.TYPE_ELEMENT: types.Element,
-    km.DataTypes.TYPE_COINMASTER: types.Coinmaster,
-    km.DataTypes.TYPE_PHYLUM: types.Phylum,
-    km.DataTypes.TYPE_BOUNTY: types.Bounty,
-    km.DataTypes.TYPE_THRALL: types.Thrall,
-    km.DataTypes.TYPE_SERVANT: types.Servant,
-    km.DataTypes.TYPE_VYKEA: types.Vykea,
+    km.DataTypes.TYPE_ITEM: Item,
+    km.DataTypes.TYPE_LOCATION: Location,
+    km.DataTypes.TYPE_CLASS: Class,
+    km.DataTypes.TYPE_STAT: Stat,
+    km.DataTypes.TYPE_SKILL: Skill,
+    km.DataTypes.TYPE_EFFECT: Effect,
+    km.DataTypes.TYPE_FAMILIAR: Familiar,
+    km.DataTypes.TYPE_SLOT: Slot,
+    km.DataTypes.TYPE_MONSTER: Monster,
+    km.DataTypes.TYPE_ELEMENT: Element,
+    km.DataTypes.TYPE_COINMASTER: Coinmaster,
+    km.DataTypes.TYPE_PHYLUM: Phylum,
+    km.DataTypes.TYPE_BOUNTY: Bounty,
+    km.DataTypes.TYPE_THRALL: Thrall,
+    km.DataTypes.TYPE_SERVANT: Servant,
+    km.DataTypes.TYPE_VYKEA: Vykea,
 }
 
 TreeMap = km.autoclass("java.util.TreeMap")
