@@ -4,14 +4,14 @@ A Python module and bridge for reflecting KoLmafia's Java environment.
 
 ## Overview
 
-The aim of the `pymafia` module is to provide an easy-to-use environment for scripting [Kingdom of Loathing](https://www.kingdomofloathing.com/) in Python. It achieves this by reflecting and wrapping the community-developed [KoLmafia](https://github.com/kolmafia/kolmafia) desktop tool. While [other languages](https://loathing-associates-scripting-society.github.io/KoL-Scripting-Resources/) for scripting KoL exist, they are arguably less approachable to non-developers than Python (although [LASS](https://github.com/Loathing-Associates-Scripting-Society) has made this much less so).
+The aim of the `pymafia` module is to provide an easy-to-use environment for scripting [Kingdom of Loathing](https://www.kingdomofloathing.com/) in Python. It achieves this by reflecting and wrapping the community-developed [KoLmafia](https://github.com/kolmafia/kolmafia) desktop tool. While [other languages](https://loathing-associates-scripting-society.github.io/KoL-Scripting-Resources/) for scripting KoL exist, they are arguably less approachable to non-developers than Python (although the efforts of [LASS](https://github.com/Loathing-Associates-Scripting-Society) have made this less so).
 
 ## Installation
 
 ```
 pip install pymafia
 ```
-The `pymafia` module uses [PyJNIus](https://github.com/kivy/pyjnius) to access Java classes, so make sure a Java Development Kit (JDK) is installed on your operating system. On windows, make sure JAVA_HOME points to your java installation so PyJNIus can locate the jvm.dll file to start java. For more information see https://pyjnius.readthedocs.io/en/stable/installation.html.
+The `pymafia` module uses [PyJNIus](https://github.com/kivy/pyjnius) to access Java classes, so make sure a Java Development Kit (JDK) is installed on your operating system. On windows, make sure `JAVA_HOME` points to your java installation so PyJNIus can locate the `jvm.dll` file to start java. For more information see https://pyjnius.readthedocs.io/en/stable/installation.html.
 
 ## Quickstart
 
