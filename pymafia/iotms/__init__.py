@@ -7,7 +7,6 @@ from . import (
     god_lobster,
     kramco,
     love_tunnel,
-    machine_elf,
     mumming_trunk,
     pantogram,
     protonic_pack,
