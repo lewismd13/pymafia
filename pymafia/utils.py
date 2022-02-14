@@ -133,5 +133,7 @@ def try_use(item):
 
 
 def get_todays_holiday_wanderers():
-    today = ash.holiday().split("/")
-    return [mon for holiday in today for mon in HOLIDAY_WANDERERS[holiday]]
+    today = ash.holiday()
+    if not today:
+        return []
+    return [mon for holiday in today for mon in HOLIDAY_WANDERERS[holiday.split("/")]]

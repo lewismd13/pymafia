@@ -40,10 +40,6 @@ def fight(reward, macro=Macro()):
 
     choice = reward_choices[reward]
     ash.use_familiar(familiar)
-    if reward == "regalia":
-        items = [x for x in regalia if _have(x)]
-        if items:
-            ash.equip(items[-1])
     initial_fights = fights_today()
     ash.visit_url("main.php?fightgodlobster=1")
     ash.run_combat(macro)
